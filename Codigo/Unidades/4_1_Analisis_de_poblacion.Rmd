@@ -12,4 +12,16 @@ knitr::opts_chunk$set(warning = F, message = F)
 library(dplyr); library(ggplot2); library(ggpubr);library(Pabloverse)
 ```
 
-Subunidad 4.1 Análisis de población: (Proporción de sexo, proporción de edades, densidad poblacional, tamaño mínimo de muestra, prevalencias ponderadas, esfuerzo de muestreo)
+# Subunidad 4.1 Análisis de población:
+
+## Proporción de sexo
+
+## Proporción de edades
+
+## Densidad poblacional
+
+## Tamaño mínimo de muestra
+
+## Prevalencias ponderadas
+
+## Esfuerzo de muestreo
