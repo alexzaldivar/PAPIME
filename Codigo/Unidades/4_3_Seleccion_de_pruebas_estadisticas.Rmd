@@ -1,0 +1,17 @@
+---
+title: "Subunidad 4.3 Selección de pruebas estadísticas"
+author: "Pablo Gomez"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = F, message = F)
+library(dplyr); library(ggplot2); library(ggpubr);library(Pabloverse)
+```
+
+Subunidad 4.3 Selección de pruebas estadísticas: (pruebas paramétricas y no paramétricas, selección de gráficos y su interpretación)
