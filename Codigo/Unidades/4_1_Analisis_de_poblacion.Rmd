@@ -9,12 +9,29 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning = F, message = F)
-library(dplyr); library(ggplot2); library(ggpubr);library(Pabloverse)
+library(dplyr); library(ggplot2); library(ggpubr)
 ```
+
+```{r}
+x <- read.csv('/Users/josepablogomez/Library/CloudStorage/Box-Box/Methods/Website/HowTo/ProjIdeas/Data/Out/iNat/MexicoPigs.csv')
+```
+
 
 # Subunidad 4.1 Análisis de población:
 
 ## Proporción de sexo
+
+```{r}
+STNet::PRRS 
+x %>% 
+  count(family, stateProvince) %>% 
+  mutate(p = n/sum(n)) %>% 
+  ggplot() +
+  geom_bar(aes(x = family, y = p), stat = 'identity') 
+
+
+```
+
 
 ## Proporción de edades
 

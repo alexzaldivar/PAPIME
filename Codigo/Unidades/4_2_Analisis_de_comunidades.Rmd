@@ -9,8 +9,21 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning = F, message = F)
-library(dplyr); library(ggplot2); library(ggpubr);library(Pabloverse)
+library(dplyr); library(ggplot2); library(ggpubr)
 ```
 
 
 Subunidad 4.2 Análisis de comunidades: (Riqueza, curvas de acumulación de riqueza, rarefacción de riqueza, diversidad alfa, diversidad beta)
+
+# Riqueza
+
+Este indice repesenta ...
+
+```{r}
+
+```
+
+
+# Curvas de acumulacion
+
+
