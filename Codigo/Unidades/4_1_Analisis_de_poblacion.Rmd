@@ -26,13 +26,12 @@ getwd()
 
 ```{r}
 STNet::PRRS 
+
 x %>% 
   count(family, stateProvince) %>% 
   mutate(p = n/sum(n)) %>% 
   ggplot() +
   geom_bar(aes(x = family, y = p), stat = 'identity') 
-
-
 ```
 
 
@@ -41,6 +40,8 @@ x %>%
 ## Densidad poblacional
 
 ## Tamaño mínimo de muestra
+
+
 
 ## Prevalencias ponderadas
 
