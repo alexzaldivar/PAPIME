@@ -14,6 +14,9 @@ library(dplyr); library(ggplot2); library(ggpubr)
 
 ```{r}
 x <- read.csv('/Users/josepablogomez/Library/CloudStorage/Box-Box/Methods/Website/HowTo/ProjIdeas/Data/Out/iNat/MexicoPigs.csv')
+
+mosquitos <- read.csv("BasesDatos/Base_mosquitos.csv")
+getwd()
 ```
 
 
