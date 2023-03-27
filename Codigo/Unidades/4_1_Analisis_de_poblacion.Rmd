@@ -10,38 +10,100 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning = F, message = F)
 library(dplyr); library(ggplot2); library(ggpubr)
+library(rlang)
+
+# Tema para los graficos
+th <- theme(
+  panel.background = element_rect(fill = 'grey95'),
+  panel.border = element_rect(fill = NA, color = 'black'), panel.grid = element_line(color = 'grey90')
+)
+
+# Lista vacia para los inputs
+input <- list()
 ```
 
-```{r}
-x <- read.csv('/Users/josepablogomez/Library/CloudStorage/Box-Box/Methods/Website/HowTo/ProjIdeas/Data/Out/iNat/MexicoPigs.csv')
-
-mosquitos <- read.csv("BasesDatos/Base_mosquitos.csv")
-getwd()
+```{r cargar base de datos}
+mosquitos <- read.csv('../../Datos/Base_mosquitos.csv')
+# create ids in a grid
+nr <- ceiling(sqrt(nrow(mosquitos))) # Create combinations for the (x,y) grid
+# Add x,y to the df
+mosquitos <- mosquitos %>% 
+  cbind(expand.grid(x = 1:nr, y = 1:nr)[1:nrow(mosquitos),])
 ```
-
 
 # Subunidad 4.1 Análisis de población:
 
-## Proporción de sexo
-
-```{r}
-STNet::PRRS 
-
-x %>% 
-  count(family, stateProvince) %>% 
-  mutate(p = n/sum(n)) %>% 
-  ggplot() +
-  geom_bar(aes(x = family, y = p), stat = 'identity') 
+```{r definir input}
+input$var <- 'SEXO' # Definir variable input
 ```
 
 
-## Proporción de edades
+```{r}
+mosquitos %>% 
+  ggplot() +
+  geom_tile(aes(x = x, y = y, fill = !!sym(input$var)), col = 'black') +
+  theme_void()
+```
+
+## Proporción por x
+
+```{r grafico de barras}
+# Grafico simple
+mosquitos %>% 
+  count(!!sym(input$var)) %>% 
+  mutate(p = n/sum(n)) %>% 
+  ggplot() +
+  geom_bar(aes(x = !!sym(input$var), y = p, fill = !!sym(input$var)), stat = 'identity') +
+  labs(title = paste0('Proporcion de mosquitos por ', input$var), x = input$var, y = 'Proporcion') +
+  th
+
+# Grafico con intervalos
+mosquitos %>% 
+  count(!!sym(input$var)) %>% 
+  mutate(N = sum(n)) %>% 
+  rowwise() %>% 
+  mutate(tst = list(broom::tidy(prop.test(n, N, conf.level=0.95)))) %>%
+  tidyr::unnest(tst) %>% 
+  mutate(p = n/sum(n)) %>% 
+  ggplot(aes(x = !!sym(input$var))) +
+  geom_bar(aes(y = p, fill = !!sym(input$var)), stat = 'identity') +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.5) +
+  labs(title = paste0('Proporcion de mosquitos por ', input$var), x = input$var, y = 'Proporcion') +
+  th
+```
+
 
 ## Densidad poblacional
 
 ## Tamaño mínimo de muestra
 
+```{r}
+input$sample_size <- 100
 
+s <- mosquitos[sample(1:nrow(mosquitos), input$sample_size),]
+
+samplePlot <- ggplot() +
+  geom_tile(data = mosquitos, aes(x = x, y = y), fill = 'grey60', col = 'black') +
+  geom_tile(data = s, aes(x = x, y = y, fill = !!sym(input$var)), col = 'black') +
+  theme_void()
+
+sampleBar <- s %>% 
+  count(!!sym(input$var)) %>% 
+  mutate(N = sum(n)) %>% 
+  rowwise() %>% 
+  mutate(tst = list(broom::tidy(prop.test(n, N, conf.level=0.95)))) %>%
+  tidyr::unnest(tst) %>% 
+  mutate(p = n/sum(n)) %>% 
+  ggplot(aes(x = !!sym(input$var))) +
+  geom_bar(aes(y = p, fill = !!sym(input$var)), stat = 'identity') +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.5) +
+  labs(title = paste0('Proporcion de mosquitos por ', input$var), x = input$var, y = 'Proporcion') +
+  th
+
+
+ggarrange(samplePlot, sampleBar, common.legend = T, legend = 'bottom') %>% 
+  annotate_figure(top = paste0('Estimacion de ', input$var, ' con la muestra seleccionada'))
+```
 
 ## Prevalencias ponderadas
 
