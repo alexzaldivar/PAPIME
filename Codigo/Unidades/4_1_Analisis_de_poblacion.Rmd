@@ -113,6 +113,7 @@ mosquitos %>%
   
 ```
 
+# Código ejemplo para densidad poblacional 
 
 
 ## Tamaño mínimo de muestra
@@ -146,5 +147,37 @@ ggarrange(samplePlot, sampleBar, common.legend = T, legend = 'bottom') %>%
 ```
 
 ## Prevalencias ponderadas
+
+La prevalencia ponderada es un concepto que se utiliza en ecología para calcular una medida de frecuencia o presencia de una especie en una población o comunidad. La prevalencia ponderada se calcula tomando en cuenta la abundancia o el peso de cada individuo en la población o comunidad.
+
+En ecología, la prevalencia ponderada puede ser utilizada para estimar la probabilidad de que una especie en particular sea observada en un hábitat determinado, teniendo en cuenta su abundancia relativa en la población o comunidad. La prevalencia ponderada también se puede utilizar para estimar la proporción de una especie en la comunidad o población total.
+
+La fórmula para calcular la prevalencia ponderada es la siguiente:
+
+prevalencia ponderada = (prevalencia * peso) / suma de pesos
+
+Donde:
+
+- prevalencia es la frecuencia o proporción de observaciones de una especie en la población o comunidad.
+- peso es la abundancia o el peso de cada individuo de la especie en la población o comunidad.
+La suma de pesos es la suma total de las abundancias o pesos de todos los individuos de todas las especies en la población o comunidad.
+
+En resumen, la prevalencia ponderada es una forma de calcular una medida de frecuencia o presencia de una especie en una población o comunidad, tomando en cuenta su abundancia o peso relativo en la población o comunidad. La fórmula para calcular la prevalencia ponderada es simple y se puede utilizar en una amplia variedad de situaciones en ecología.
+
+La ecología también puede utilizar el concepto de prevalencias ponderadas en algunos casos, pero el cálculo dependerá de los datos específicos que estés trabajando. EJEMPLO:
+```{r}
+# Cargar los datos
+datos <- read.csv("datos_especies.csv", header = TRUE)
+
+# Calcular el peso para cada especie según su abundancia
+peso <- datos$abundancia / sum(datos$abundancia)
+
+# Calcular la prevalencia ponderada para las especies observadas
+prevalencia_ponderada <- sum(datos$observadas * peso)
+
+# Mostrar el resultado
+cat("La prevalencia ponderada de las especies observadas es:", round(prevalencia_ponderada, 2))
+```
+En este ejemplo, cargamos los datos desde un archivo CSV y los almacenamos en un objeto llamado datos. Luego, calculamos el peso para cada especie según su abundancia, dividiendo la columna de abundancia por la suma total de abundancias. A continuación, calculamos la prevalencia ponderada para las especies observadas mediante la fórmula sum(datos$observadas * peso), donde datos$observadas es un vector binario que indica si cada especie fue observada o no. Utilizamos la función cat() para mostrar el resultado.
 
 ## Esfuerzo de muestreo
