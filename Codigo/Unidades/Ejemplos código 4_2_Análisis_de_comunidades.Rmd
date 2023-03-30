@@ -9,16 +9,108 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(vegan)
-library(BiodiversityR)
 ```
-Base de datos
+
+#Riqueza de especies
+Se utiliza la función specnumber() de la librería "vegan" para calcular la riqueza de especies a partir de los datos.Ten en cuenta que specnumber() simplemente cuenta el número total de especies presentes en los datos. Si deseas calcular la riqueza de especies en cada comunidad individualmente, puedes utilizar la función specaccum() en su lugar.
+
 ```{r}
-mosquitos
-mosquitos.tabla <- ftable(SITIO ~ ESPECIE,data = mosquitos)
+# Cargar la librería "vegan"
+library(vegan)
+
+# Cargar datos de ejemplo
+data( )
+
+# Calcular la riqueza de especies
+species_richness <- specnumber( )
+
+# Imprimir la riqueza de especies
+species_richness
 ```
 
 
-EJEMPLO DE CÓDIGO
+#Curva de acumulación de Riqueza
+Se utiliza la función specaccum() de la librería "vegan" para calcular la curva de acumulación de riqueza de especies a partir de una serie de datos, luego, se grafica la curva utilizando la función plot(), con los ejes x e y etiquetados y un título para la gráfica.
+
+```{r}
+# Cargar la librería "vegan"
+library(vegan)
+
+# Cargar datos de 
+data( )
+
+# Calcular la curva de acumulación de riqueza de especies
+acum_richness <- specaccum( )
+
+# Graficar la curva de acumulación de riqueza de especies
+plot(acum_richness, xlab = "Número de muestras", ylab = "Riqueza acumulada",
+     main = "Curva de acumulación de riqueza de especies")
+```
+
+#Rarefacción de riqueza
+se utiliza la función rarecurve() de la librería "vegan" para calcular la curva de rarefacción de riqueza a partir de los datos. Luego, se grafica la curva utilizando la función plot(), con los ejes x e y etiquetados y un título para la gráfica. 
+```{r}
+# Cargar la librería "vegan"
+library(vegan)
+
+# Cargar datos de ejemplo
+data( )
+
+# Calcular la curva de rarefacción de riqueza
+rare_richness <- rarecurve( )
+
+# Graficar la curva de rarefacción de riqueza
+plot(rare_richness, xlab = "Número de muestras", ylab = "Riqueza",
+     main = "Curva de rarefacción de riqueza")
+```
+
+# Diversidad Alfa
+Se utiliza la función diversity() de la librería "vegan" para calcular la diversidad alfa de especies a partir de los datos. 
+La diversidad se calcula utilizando el índice de diversidad de Shannon por defecto. 
+Los valores de diversidad alfa se imprimen en la consola.
+Si deseas calcular la diversidad alfa de especies para cada comunidad individualmente, puedes agregar el argumento index y especificar un índice de diversidad diferente.  En este ejemplo, se calcula la diversidad alfa de especies utilizando el índice de Simpson para cada comunidad en la base de datos, y los valores se imprimen en la consola.
+```{r}
+# Cargar la librería "vegan"
+library(vegan)
+
+# Cargar datos de ejemplo
+data( )
+
+# Calcular la diversidad alfa de especies
+div_alfa <- diversity( )
+
+# Imprimir los valores de diversidad alfa
+div_alfa
+
+# Calcular la diversidad alfa de especies para cada comunidad
+div_alfa_com <- diversity(base de datos , index = "simpson")
+
+# Imprimir los valores de diversidad alfa para cada comunidad
+div_alfa_com
+```
+
+#Diversidad Beta
+se utiliza la función betadisper() de la librería "vegan" para calcular la diversidad beta de especies a partir de los datos de ejemplo dune. Los valores de diversidad beta se imprimen en la consola. Además, se utiliza la función plot() para graficar los resultados. El gráfico muestra la variabilidad de la composición de especies entre las comunidades.
+Ten en cuenta que betadisper() se utiliza para analizar la variabilidad de la composición de especies entre diferentes grupos o comunidades. Si deseas analizar la similitud entre las comunidades, puedes utilizar otras funciones de la librería "vegan", como vegdist() y mantel() para realizar un análisis de similitud y correlación entre matrices.
+```{r}
+# Cargar la librería "vegan"
+library(vegan)
+
+# Cargar datos de ejemplo
+data( )
+
+# Calcular la diversidad beta de especies
+beta_div <- betadisper( )
+
+# Imprimir los valores de diversidad beta
+beta_div
+
+# Graficar los resultados
+plot(beta_div, main = "Diversidad beta de especies")
+```
+
+
+EJEMPLO DE CÓDIGO de la clase práctica de Oscar
 ```{r}
 library(BiodiversityR)
 library(vegan)
@@ -114,7 +206,7 @@ beta.pair(gb.biol,index.family = "sorensen")
 ```
 
 
-EJEMPLO 2 de código
+EJEMPLO 2 de código de la clase práctica de Oscar
 ```{r}
 ### Grafica de  curva de acumulación , PRACTICA ##
 
@@ -175,6 +267,7 @@ dim(gb.biol)
 range(rowSums(gb.biol))
 rarefy(gb.biol,sample = 205)
 drarefy(gb.biol,sample = 205)
+
 # CURVA DE ACUMULACIÓN DE ESPECIES
 gb.sa <- specaccum(gb.biol,method = "collector")
 gb.sa
@@ -187,29 +280,4 @@ ac
 gb.sa2 <- as.data.frame(gb.sa)
 ```
 
-```{r}
-
-mosquitos.1 <- mosquitos %>% select(SITIO,TRAMPA,GENERO,ESPECIE,NOMBRE,SEXO,EDAD)
-
-rarefy(gb.biol,sample = 205)
-drarefy(gb.biol,sample = 205)
-
-# CURVA DE ACUMULACIÓN DE ESPECIES
-
-mosquitos.1 <- specaccum(mosquitos,method = "random")
-gb.sa
-gb.sa$richness
-plot(gb.sa)
-gb.site <- read.csv("GBsite.csv",row.names=1)
-head(gb.site)
-ac <- accumcomp(x = gb.biol,y=gb.site,factor = "Habitat", plotit = T, rainbow = F,legend = F, xlim = c(0,7))
-ac
-gb.sa2 <- as.data.frame(gb.sa)
-```
-Código con base de datos Mosquitos
-```{r}
-mosquitos.1
-S <- specnumber(mosquitos.1)
-(raremax <- min(rowSums(mosquitos.1)))
-```
 
