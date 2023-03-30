@@ -1,7 +1,5 @@
 ---
-title: "Biodiversidad"
-author: "Daniela Heredia"
-date: "2023-03-30"
+title: "Ejemplo código Análisi de comunidades"
 output: html_document
 ---
 
@@ -45,10 +43,16 @@ drarefy(gb.biol,sample = 205)
 ### CURVA DE ACUMULACIÓN DE ESPECIES ###
 gb.sa <- specaccum(gb.biol,method = "collector")
 gb.sa$richness
+
 plot(gb.sa)
+
 gb.site <- read.csv("GBsite.csv",row.names=1)
+
 head(gb.site)
-ac <- accumcomp(x = gb.biol,y=gb.site,factor = "Habitat", plotit = T, rainbow = F,legend = F, xlim = c(0,7))
+
+ac <- accumcomp(x = gb.biol,y=gb.site,factor = "Habitat", 
+                plotit = T, rainbow = F,legend = F, xlim = c(0,7))
+
 gb.sa2 <- as.data.frame(gb.sa)
 
 ###Estimacion de Riqueza ###
@@ -56,10 +60,15 @@ library(fossil)
 est <- spp.est(t(gb.biol),rand=100, abund = T)
 gb.site
 library(ggplot2)
-edge.sp <- data.frame(spp.est(t(gb.site),rand = 100, abund = T), Acumulacion = edge.ac$richeness, Habitat = rep("Edge",nrow(gb.edge))plot=T)
+edge.sp <- data.frame(spp.est(t(gb.site),rand = 100, abund = T), 
+                      Acumulacion = edge.ac$richeness, 
+                      Habitat = rep("Edge",nrow(gb.edge))plot=T)
+
 ggplot(gb.sa,aes(gb.sa$richeness,)) +geom_point() 
    + facet_wrap(~Habitat)
-ac <- accumcomp(x = gb.biol,y=gb.site,factor = "Habitat", plotit = T, rainbow = F,legend = F, xlim = c(0,7))
+
+ac <- accumcomp(x = gb.biol,y=gb.site,factor = "Habitat", 
+                plotit = T, rainbow = F,legend = F, xlim = c(0,7))
 
 
 ### Curvas de Rango de Abundancia ###
@@ -197,7 +206,7 @@ ac <- accumcomp(x = gb.biol,y=gb.site,factor = "Habitat", plotit = T, rainbow = 
 ac
 gb.sa2 <- as.data.frame(gb.sa)
 ```
-
+Código con base de datos Mosquitos
 ```{r}
 mosquitos.1
 S <- specnumber(mosquitos.1)
