@@ -54,7 +54,7 @@ mosquitos %>%
   mutate(p = n/sum(n)) %>% 
   ggplot() +
   geom_bar(aes(x = !!sym(input$var), y = p, fill = !!sym(input$var)), stat = 'identity') +
-  labs(title = paste0('Proporcion de mosquitos por ', input$var), x = input$var, y = 'Proporcion') +
+  labs(title = paste0('Proporción de mosquitos por ', input$var), x = input$var, y = 'Proporción') +
   th
 
 # Grafico con intervalos
@@ -68,12 +68,52 @@ mosquitos %>%
   ggplot(aes(x = !!sym(input$var))) +
   geom_bar(aes(y = p, fill = !!sym(input$var)), stat = 'identity') +
   geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.5) +
-  labs(title = paste0('Proporcion de mosquitos por ', input$var), x = input$var, y = 'Proporcion') +
+  labs(title = paste0('Proporción de mosquitos por ', input$var), x = input$var, y = 'Proporción') +
   th
+```
+
+## Proporción por EDAD
+```{r}
+
+input$varEdad <- 'EDAD' # Definir variable input
+
+mosquitos %>% count(EDAD) %>% 
+  mutate(p = n/sum(n))
+
+# Grafico simple proporciones x EDAD
+mosquitos %>% 
+  count(!!sym(input$varEdad)) %>% 
+  mutate(p = n/sum(n)) %>% 
+  ggplot() +
+  geom_bar(aes(x = !!sym(input$varEdad), y = p, fill = !!sym(input$varEdad)), stat = 'identity') +
+  labs(title = paste0('Proporción de mosquitos por ', input$varEdad), 
+       x = input$varEdad, y = 'Proporción') + th
+  
 ```
 
 
 ## Densidad poblacional
+
+#La densidad de población es el número promedio de individuos por unidad de área o volumen, en este caso por sitio  
+
+```{r}
+input$varSitio <- 'SITIO' # Definir variable input
+
+mosquitos %>% count(SITIO) %>% 
+  mutate(p = n/sum(n))
+
+# Grafico simple proporciones x SITIO
+mosquitos %>% 
+  count(!!sym(input$varSitio )) %>% 
+  mutate(p = n/sum(n)) %>% 
+  ggplot() +
+  geom_bar(aes(x = !!sym(input$varSitio ), y = p, fill = !!sym(input$varSitio )), stat = 'identity') +
+  labs(title = paste0('Proporción de mosquitos por ', input$varSitio ), 
+       x = input$varSitio , y = 'Proporción') + th
+  
+```
+
+
 
 ## Tamaño mínimo de muestra
 
@@ -97,7 +137,7 @@ sampleBar <- s %>%
   ggplot(aes(x = !!sym(input$var))) +
   geom_bar(aes(y = p, fill = !!sym(input$var)), stat = 'identity') +
   geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.5) +
-  labs(title = paste0('Proporcion de mosquitos por ', input$var), x = input$var, y = 'Proporcion') +
+  labs(title = paste0('Proporción de mosquitos por ', input$var), x = input$var, y = 'Proporción') +
   th
 
 
