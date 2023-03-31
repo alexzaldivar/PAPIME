@@ -1,12 +1,18 @@
 # Header -----------
-header <- dashboardHeader(
+header <- dashboardHeader(title = "Medicina de conservación", titleWidth = 300
   
 )
 
 # Sidebar -----------
-sidebar <- dashboardSidebar(
-  
-)
+sidebar <- dashboardSidebar(width = 300,
+                            sidebarMenu(id = "sidebar",
+                                        menuItem("Presentación", tabName = "presentacion"),
+                                        menuItem("Análisis de población", tabName = "Pob",
+                                                 menuSubItem("Características de población", tabName = "PropEdadSexo"),
+                                                 menuSubItem("Muestreo", tabName = "Muestra")
+                                                 )
+                                        )
+                            )
 
 # Body --------
 body <- dashboardBody(
