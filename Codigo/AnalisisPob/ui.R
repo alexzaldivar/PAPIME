@@ -16,6 +16,19 @@ sidebar <- dashboardSidebar(width = 300,
 
 # Body --------
 body <- dashboardBody(
+  tabItems(
+    tabItem(tabName = "presentacion",
+            tags$h3(tags$b("Universidad Nacional Autónoma del México"), align = "center"),
+            tags$h3(tags$b("Facultad de Medicina Veterinaria y Zootécnia"), align = "center"),
+            tags$h3(tags$b("Departamento de etología, fauna silvestre y animales de laboratorio"), align = "center"),
+            br(),
+            tags$div(style = "text-align: center;",
+            tags$img(src = "leeyus.png", align = "center")),
+            hr(),
+            tags$h2(tags$b("Plataforma interactiva para la asignatura de prácticas de temas selectos de salud
+                           pública: medicina de conservación y ecología de enfermedades"), align = "center")
+            ),
+    tabItem(tabName = "PropEdadSexo",
   fluidRow(
     box(
       ## Input de la variable -----------
@@ -31,6 +44,8 @@ body <- dashboardBody(
     )
   )
   
+)
+)
 )
 
 
