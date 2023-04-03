@@ -111,7 +111,9 @@ plot(beta_div, main = "Diversidad beta de especies")
 ```
 
 
-# EJEMPLO DE OSCAR
+# Codigo de Oscar
+
+## Ejemplo 1
 
 ```{r}
 # library(BiodiversityR)
@@ -219,7 +221,8 @@ beta.pair(gb.biol,index.family = "sorensen")
 ```
 
 
-EJEMPLO 2 de código de la clase práctica de Oscar
+## Ejemplo 2
+
 ```{r}
 ### Grafica de  curva de acumulación , PRACTICA ##
 #Librerias
@@ -231,7 +234,7 @@ library(dplyr)
 library(tidyverse)
 
 
-gb.biol <- read.csv("Ground Beetles and abundance.csv",row.names = 1)
+gb.biol <- read.csv("../../Datos/Ground Beetles and abundance.csv",row.names = 1)
 
 # 1.- Filtra base de datos gb.biol
 E <- gb.biol [1:6,]
@@ -254,7 +257,7 @@ df <- as.data.frame(df)
 df <- cbind(df,gb.site$Habitat)
 
 # 5.- seleccionar base de datos
-df2 <- df %>% select (N.obs, S.obs,  Chao1,  Jack1 ,`gb.site$Habitat`)%>% gather("variable", "valor",2:4)
+df2 <- df %>% select (N.obs, S.obs,  Chao1,  Jack1 ,`gb.site$Habitat`)%>% tidyr::gather("variable", "valor",2:4)
 # 6.- Graficar
 
 ggplot(df2,aes(N.obs,valor,group=variable,col=variable,lty=variable)) + geom_line()+ facet_wrap(~gb.site$Habitat)
@@ -273,7 +276,7 @@ s.mosquits <- specaccum(mosquitos,method = "collector")
 
 
 ```{r}
-gb.biol <- read.csv("Ground Beetles and abundance.csv",row.names = 1)
+gb.biol <- read.csv("../../Datos/Ground Beetles and abundance.csv",row.names = 1)
 dim(gb.biol)
 range(rowSums(gb.biol))
 rarefy(gb.biol,sample = 205)
@@ -284,7 +287,7 @@ gb.sa <- specaccum(gb.biol,method = "collector")
 gb.sa
 gb.sa$richness
 plot(gb.sa)
-gb.site <- read.csv("GBsite.csv",row.names=1)
+gb.site <- read.csv("../../Datos/GBsite.csv",row.names=1)
 head(gb.site)
 ac <- accumcomp(x = gb.biol,y=gb.site,factor = "Habitat", plotit = T, rainbow = F,legend = F, xlim = c(0,7))
 ac
