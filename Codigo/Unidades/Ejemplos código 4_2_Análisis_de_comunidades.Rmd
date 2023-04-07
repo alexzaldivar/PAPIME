@@ -23,7 +23,7 @@ library(vegan)
 data( )
 
 # Calcular la riqueza de especies
-species_richness <- specnumber( )
+species_richness <- specnumber()
 
 # Imprimir la riqueza de especies
 species_richness
@@ -31,6 +31,7 @@ species_richness
 
 
 #Curva de acumulación de Riqueza
+
 Se utiliza la función specaccum() de la librería "vegan" para calcular la curva de acumulación de riqueza de especies a partir de una serie de datos, luego, se grafica la curva utilizando la función plot(), con los ejes x e y etiquetados y un título para la gráfica.
 
 ```{r}
@@ -115,7 +116,7 @@ plot(beta_div, main = "Diversidad beta de especies")
 
 ## Ejemplo 1
 
-```{r}
+```{r contar numero de especies?}
 # library(BiodiversityR)
 library(vegan)
 #BASE DE DATOS
@@ -131,17 +132,35 @@ names(s) <- levels(pd$Site)
 ```
 
 ```{r}
+pd %>% 
+  count(Site)
+```
+
+
+```{r}
 #Nueva base de datos
 gb.biol <- read.csv("../../Datos/Ground Beetles and abundance.csv",row.names = 1)
 dim(gb.biol)
 range(rowSums(gb.biol))
-rarefy(gb.biol,sample = 205)
-drarefy(gb.biol,sample = 205)
+
+# Rarefied species richness for community ecologists ----------
+# Expected species richness in random subsamples of size sample from the community
+rarefy(gb.biol,sample = 205) 
+drarefy(gb.biol,sample = 205) # Rarefied species richness for communit ecologists
+dra
 ```
+
+```{r}
+x <- gb.biol %>% 
+  mutate(site = rownames(.))
+```
+
 
 ```{r curva de acumulacion de especies}
 ### CURVA DE ACUMULACIÓN DE ESPECIES ###
 gb.sa <- specaccum(gb.biol,method = "collector")
+
+gb.biol
 gb.sa$richness
 
 plot(gb.sa)
