@@ -35,6 +35,7 @@ body <- dashboardBody(
       shiny::selectInput(inputId = 'var', label = 'Variable', choices = colnames(mosquitos)),
       
       ## Output del grid ----------
+      plotlyOutput('Bar'),
       plotlyOutput('Grid'),
      hr() 
     ),

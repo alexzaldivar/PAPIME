@@ -20,6 +20,9 @@ th <- theme(
 
 # Lista vacia para los inputs
 input <- list()
+
+# lista de figuras
+p <- list()
 ```
 
 ```{r cargar base de datos}
@@ -38,13 +41,48 @@ input$var <- 'SITIO' # Definir variable input
 ```
 
 
-```{r}
-mosquitos %>% 
+```{r grid}
+p$grid <- mosquitos %>% 
   ggplot() +
   geom_tile(aes(x = x, y = y, fill = !!sym(input$var)), col = 'black') +
-  # facet_wrap(~SITIO) + # 
   theme_void()
+
+p$grid
 ```
+
+```{r}
+ax <- list(
+title = '',
+zeroline = FALSE,
+showline = FALSE,
+showticklabels = FALSE,
+ticklen = 0,
+showgrid = FALSE
+)
+
+mosquitos %>% 
+  mutate(z = as.integer(factor(!!sym(input$var)))) %>% 
+  select(x, y, !!sym(input$var), z) %>% 
+  plot_ly(
+    x = ~x, y = ~y, z = ~z, 
+    colors = rainbow(length(levels(.['input$var'])), 0.6, 0.9),
+    type = 'heatmap', 
+    text = as.formula(paste0('~', input$var)), hovertemplate = paste0('<b>%{text}</b>')
+  ) %>% plotly::hide_colorbar() %>% 
+  layout(xaxis = ax, yaxis = ax)
+```
+
+
+```{r grid con plotly}
+m <- matrix(rnorm(9), nrow = 3, ncol = 3)
+fig <- plot_ly(
+    x = c("a", "b", "c"), y = c("d", "e", "f"),
+    z = m, type = "heatmap"
+)
+
+fig
+```
+
 
 ## Proporción por x
 
@@ -59,7 +97,7 @@ mosquitos %>%
   th
 
 # Grafico con intervalos
-mosquitos %>% 
+p$bar <- mosquitos %>% 
   count(!!sym(input$var)) %>% 
   mutate(N = sum(n)) %>% 
   rowwise() %>% 
@@ -71,6 +109,8 @@ mosquitos %>%
   geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.5) +
   labs(title = paste0('Proporción de mosquitos por ', input$var), x = input$var, y = 'Proporción') +
   th
+
+p$bar
 ```
 
 ## Proporción por EDAD

@@ -11,3 +11,8 @@ nr <- ceiling(sqrt(nrow(mosquitos))) # Create combinations for the (x,y) grid
 mosquitos <- mosquitos %>% 
   cbind(expand.grid(x = 1:nr, y = 1:nr)[1:nrow(mosquitos),])
 
+# Tema para los graficos
+th <- theme(
+  panel.background = element_rect(fill = 'grey95'),
+  panel.border = element_rect(fill = NA, color = 'black'), panel.grid = element_line(color = 'grey90')
+)

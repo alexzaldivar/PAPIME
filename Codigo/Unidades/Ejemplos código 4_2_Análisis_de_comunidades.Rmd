@@ -5,56 +5,81 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library(vegan); library(dplyr)
 ```
+# Riqueza de especies
 
-```{r}
-library(vegan)
-```
+Se utiliza la función `specnumber()` de la librería "vegan" para calcular la riqueza de especies a partir de los datos.Ten en cuenta que `specnumber()` simplemente cuenta el número total de especies presentes en los datos. Si deseas calcular la riqueza de especies en cada comunidad individualmente, puedes utilizar la función `specaccum()` en su lugar.
 
-#Riqueza de especies
-
-Se utiliza la función specnumber() de la librería "vegan" para calcular la riqueza de especies a partir de los datos.Ten en cuenta que specnumber() simplemente cuenta el número total de especies presentes en los datos. Si deseas calcular la riqueza de especies en cada comunidad individualmente, puedes utilizar la función specaccum() en su lugar.
-
-```{r}
+```{r riqueza datos oscar}
 # Cargar la librería "vegan"
 library(vegan)
-
 # Cargar datos de ejemplo
-data( )
+pd <- read.csv("../../Datos/Plant species errors fixed.csv", header = T, stringsAsFactors = T)
+# La tabla se tiene que formatear en Numero de especies por sitio
+pd.t <- ftable(Species~Site,data = pd)
+# Calcular la riqueza de especies (numero de especies por sitio)
+species_richness <- specnumber(pd.t)
+# Asignar los nombres
+names(species_richness) <- levels(pd$Site)
 
-# Calcular la riqueza de especies
-species_richness <- specnumber()
+# Imprimir la riqueza de especies
+species_richness
+```
+
+```{r riqueza datos mosquito}
+# Cargar datos de ejemplo
+pd <- read.csv("../../Datos/Plant species errors fixed.csv", header = T, stringsAsFactors = T)
+# La tabla se tiene que formatear en Numero de especies por sitio
+pd.t <- ftable(ESPECIE~SITIO,data = mosquitos)
+# Calcular la riqueza de especies (numero de especies por sitio)
+species_richness <- specnumber(pd.t)
+# Asignar los nombres
+names(species_richness) <- levels(factor(mosquitos$SITIO))
 
 # Imprimir la riqueza de especies
 species_richness
 ```
 
 
-#Curva de acumulación de Riqueza
+# Curva de acumulación de Riqueza
 
 Se utiliza la función specaccum() de la librería "vegan" para calcular la curva de acumulación de riqueza de especies a partir de una serie de datos, luego, se grafica la curva utilizando la función plot(), con los ejes x e y etiquetados y un título para la gráfica.
 
-```{r}
-# Cargar la librería "vegan"
-library(vegan)
-
+```{r curva de acumulacion oscar}
 # Cargar datos de 
-data( )
-
+gb.biol <- read.csv("../../Datos/Ground Beetles and abundance.csv",row.names = 1)
 # Calcular la curva de acumulación de riqueza de especies
-acum_richness <- specaccum( )
+acum_richness <- specaccum(gb.biol,method = "collector")
 
 # Graficar la curva de acumulación de riqueza de especies
 plot(acum_richness, xlab = "Número de muestras", ylab = "Riqueza acumulada",
      main = "Curva de acumulación de riqueza de especies")
 ```
 
-#Rarefacción de riqueza
-se utiliza la función rarecurve() de la librería "vegan" para calcular la curva de rarefacción de riqueza a partir de los datos. Luego, se grafica la curva utilizando la función plot(), con los ejes x e y etiquetados y un título para la gráfica. 
-```{r}
-# Cargar la librería "vegan"
-library(vegan)
+```{r curva de acumulacion mosquitos}
+# Cargar datos de 
+mt <- mosquitos %>% # USar datos de mosquitos
+  count(SITIO, ESPECIE) %>%  # COntar numero de especies por sitio
+  tidyr::spread(ESPECIE, n) %>%  # distribuir las variables (long to wide)
+  `rownames<-`(.$SITIO) %>%  # assignar nombre de los sitios por file
+  select(-SITIO) %>%  # Remover variable de sitio
+  mutate_all(~ifelse(is.na(.), 0, .)) # Asignar 0s a los NAs
 
+# Calcular la curva de acumulación de riqueza de especies
+acum_richness <- specaccum(mt,method = "collector")
+
+# Graficar la curva de acumulación de riqueza de especies
+plot(acum_richness, xlab = "Número de muestras", ylab = "Riqueza acumulada",
+     main = "Curva de acumulación de riqueza de especies")
+```
+
+# Rarefacción de riqueza
+se utiliza la función rarecurve() de la librería "vegan" para calcular la curva de rarefacción de riqueza a partir de los datos. Luego, se grafica la curva utilizando la función plot(), con los ejes x e y etiquetados y un título para la gráfica. 
+
+
+```{r}
 # Cargar datos de ejemplo
 data( )
 
@@ -66,49 +91,85 @@ plot(rare_richness, xlab = "Número de muestras", ylab = "Riqueza",
      main = "Curva de rarefacción de riqueza")
 ```
 
+No encontre esa parte en el codigo de oscar, pero encontre esto en la documentacion de la funcion
+
+```{r}
+data(BCI)
+S <- specnumber(BCI) # observed number of species
+raremax <- min(rowSums(BCI))
+Srare <- rarefy(BCI, raremax)
+
+plot(S, Srare, xlab = "Observed No. of Species", ylab = "Rarefied No. of Species")
+abline(0, 1)
+rarecurve(BCI, step = 20, sample = raremax, col = "red3", cex = 0.6)
+```
+
 # Diversidad Alfa
-Se utiliza la función diversity() de la librería "vegan" para calcular la diversidad alfa de especies a partir de los datos. 
+
+Se utiliza la función `diversity()` de la librería "vegan" para calcular la diversidad alfa de especies a partir de los datos. 
 La diversidad se calcula utilizando el índice de diversidad de Shannon por defecto. 
 Los valores de diversidad alfa se imprimen en la consola.
 Si deseas calcular la diversidad alfa de especies para cada comunidad individualmente, puedes agregar el argumento index y especificar un índice de diversidad diferente.  En este ejemplo, se calcula la diversidad alfa de especies utilizando el índice de Simpson para cada comunidad en la base de datos, y los valores se imprimen en la consola.
-```{r}
-# Cargar la librería "vegan"
-library(vegan)
 
-# Cargar datos de ejemplo
-data( )
-
+```{r alpha con los datos de oscar}
 # Calcular la diversidad alfa de especies
-div_alfa <- diversity( )
+div_alfa <- diversity( gb.biol)
 
 # Imprimir los valores de diversidad alfa
 div_alfa
 
 # Calcular la diversidad alfa de especies para cada comunidad
-div_alfa_com <- diversity(base de datos , index = "simpson")
+div_alfa_com <- diversity(gb.biol , index = "simpson")
 
 # Imprimir los valores de diversidad alfa para cada comunidad
 div_alfa_com
 ```
 
-#Diversidad Beta
+```{r alpha con mosquitos}
+# Calcular la diversidad alfa de especies
+div_alfa <- diversity(mt)
+
+# Imprimir los valores de diversidad alfa
+div_alfa
+
+# Calcular la diversidad alfa de especies para cada comunidad
+div_alfa_com <- diversity(mt , index = "simpson")
+
+# Imprimir los valores de diversidad alfa para cada comunidad
+div_alfa_com
+```
+
+
+# Diversidad Beta
 se utiliza la función betadisper() de la librería "vegan" para calcular la diversidad beta de especies a partir de los datos de ejemplo dune. Los valores de diversidad beta se imprimen en la consola. Además, se utiliza la función plot() para graficar los resultados. El gráfico muestra la variabilidad de la composición de especies entre las comunidades.
 Ten en cuenta que betadisper() se utiliza para analizar la variabilidad de la composición de especies entre diferentes grupos o comunidades. Si deseas analizar la similitud entre las comunidades, puedes utilizar otras funciones de la librería "vegan", como vegdist() y mantel() para realizar un análisis de similitud y correlación entre matrices.
+
 ```{r}
-# Cargar la librería "vegan"
-library(vegan)
-
-# Cargar datos de ejemplo
-data( )
-
+#Suma de fila por Habitat
+gbt <- rowsum(gb.biol,group= gb.site$Habitat)
 # Calcular la diversidad beta de especies
-beta_div <- betadisper( )
+beta_div <- betadisper(gbt)
 
 # Imprimir los valores de diversidad beta
 beta_div
 
 # Graficar los resultados
 plot(beta_div, main = "Diversidad beta de especies")
+```
+
+```{r}
+data(varespec)
+
+## Bray-Curtis distances between samples
+dis <- vegdist(varespec)
+
+## First 16 sites grazed, remaining 8 sites ungrazed
+groups <- factor(c(rep(1,16), rep(2,8)), labels = c("grazed","ungrazed"))
+
+## Calculate multivariate dispersions
+mod <- betadisper(dis, groups)
+mod
+plot(mod)
 ```
 
 
@@ -312,5 +373,7 @@ ac <- accumcomp(x = gb.biol,y=gb.site,factor = "Habitat", plotit = T, rainbow = 
 ac
 gb.sa2 <- as.data.frame(gb.sa)
 ```
+
+
 
 
