@@ -161,11 +161,10 @@ mosquitos %>%
 
 # Código ejemplo para densidad poblacional 
 
-
 ## Tamaño mínimo de muestra
 
 ```{r}
-input$sample_size <- 100
+input$sample_size <- 300
 
 s <- mosquitos[sample(1:nrow(mosquitos), input$sample_size),]
 
@@ -190,6 +189,19 @@ sampleBar <- s %>%
 ggarrange(samplePlot, sampleBar, common.legend = T, legend = 'bottom') %>% 
   annotate_figure(top = paste0('Estimacion de ', input$var, ' con la muestra seleccionada'))
 ```
+
+
+*Nota: Agregar seccion para la relacion prevalencia~numero de muestras*
+
+  - prevalencia esperada
+  - differenca minima a detectar
+  - error estandar
+  - Confidecne level
+
+```{r}
+
+```
+
 
 ## Prevalencias ponderadas
 

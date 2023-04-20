@@ -8,6 +8,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(vegan); library(dplyr)
 ```
+
+  - [ ] Hacer curva de acumulacion
+  - [ ] Curva de rarefaccion
+  - [ ] Curvas por sitio para visualizar la contribucion por sitio
+  - [ ] Grafico de barras con indices (shannon(H)) para todas las sitios (sitio~indice)
+  - [ ] dar opcion de comparar dos communidades en cuanto a su numero de especies (abundancia~especie)
+
 # Riqueza de especies
 
 Se utiliza la función `specnumber()` de la librería "vegan" para calcular la riqueza de especies a partir de los datos.Ten en cuenta que `specnumber()` simplemente cuenta el número total de especies presentes en los datos. Si deseas calcular la riqueza de especies en cada comunidad individualmente, puedes utilizar la función `specaccum()` en su lugar.
@@ -29,8 +36,6 @@ species_richness
 ```
 
 ```{r riqueza datos mosquito}
-# Cargar datos de ejemplo
-pd <- read.csv("../../Datos/Plant species errors fixed.csv", header = T, stringsAsFactors = T)
 # La tabla se tiene que formatear en Numero de especies por sitio
 pd.t <- ftable(ESPECIE~SITIO,data = mosquitos)
 # Calcular la riqueza de especies (numero de especies por sitio)
@@ -58,6 +63,8 @@ plot(acum_richness, xlab = "Número de muestras", ylab = "Riqueza acumulada",
      main = "Curva de acumulación de riqueza de especies")
 ```
 
+COmparar sitions en cuanto a la riqueza, Retirar sitios para ver la influencia en la curva
+
 ```{r curva de acumulacion mosquitos}
 # Cargar datos de 
 mt <- mosquitos %>% # USar datos de mosquitos
@@ -75,9 +82,15 @@ plot(acum_richness, xlab = "Número de muestras", ylab = "Riqueza acumulada",
      main = "Curva de acumulación de riqueza de especies")
 ```
 
-# Rarefacción de riqueza
-se utiliza la función rarecurve() de la librería "vegan" para calcular la curva de rarefacción de riqueza a partir de los datos. Luego, se grafica la curva utilizando la función plot(), con los ejes x e y etiquetados y un título para la gráfica. 
+Para la parte interactiva, hacer curva por sitio
 
+
+# Rarefacción de riqueza
+
+*Suaviza la curva de acumulacion, generalizan la curva para hacer prediccion de la proyeccion de la curva*
+
+
+se utiliza la función rarecurve() de la librería "vegan" para calcular la curva de rarefacción de riqueza a partir de los datos. Luego, se grafica la curva utilizando la función plot(), con los ejes x e y etiquetados y un título para la gráfica. 
 
 ```{r}
 # Cargar datos de ejemplo
@@ -139,8 +152,8 @@ div_alfa_com <- diversity(mt , index = "simpson")
 div_alfa_com
 ```
 
-
 # Diversidad Beta
+
 se utiliza la función betadisper() de la librería "vegan" para calcular la diversidad beta de especies a partir de los datos de ejemplo dune. Los valores de diversidad beta se imprimen en la consola. Además, se utiliza la función plot() para graficar los resultados. El gráfico muestra la variabilidad de la composición de especies entre las comunidades.
 Ten en cuenta que betadisper() se utiliza para analizar la variabilidad de la composición de especies entre diferentes grupos o comunidades. Si deseas analizar la similitud entre las comunidades, puedes utilizar otras funciones de la librería "vegan", como vegdist() y mantel() para realizar un análisis de similitud y correlación entre matrices.
 
