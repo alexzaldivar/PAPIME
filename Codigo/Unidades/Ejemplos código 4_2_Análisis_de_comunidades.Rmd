@@ -375,5 +375,73 @@ gb.sa2 <- as.data.frame(gb.sa)
 ```
 
 
+## Paqueteria iNEXT
+La paquetería "iNEXT" de R es una herramienta diseñada para evaluar la diversidad biológica en comunidades ecológicas utilizando índices de diversidad basados en el concepto de extrapolar y interpolar curvas de rarefacción y extrapolación.
+
+Algunas de las funciones principales de la paquetería "iNEXT" de R son:
+
+
+#Función iNEXT
+La función iNEXT() toma como entrada un objeto de datos de biodiversidad y devuelve un objeto de clase "iNEXT" que contiene los resultados de la extrapolar y/o interpolar curvas de rarefacción y extrapolación para los índices de diversidad.
+
+```{r}
+# Cargar los datos de biodiversidad de la paquetería iNEXT
+data(beetles)
+
+# Calcular los índices de diversidad para la muestra "Simpson"
+mydata <- beetles$Simpson
+result <- iNEXT(mydata, q = 0:2, datatype = "abundance", se = TRUE)
+
+# Imprimir los resultados
+print(result)
+```
+
+#Función iNEXT.plot
+La función iNEXT.plot() es una herramienta que se utiliza para visualizar los resultados de la función iNEXT() en un gráfico de curva de rarefacción y extrapolación. Esta función toma como entrada un objeto de clase "iNEXT" y genera un gráfico con los índices de diversidad en el eje Y y la riqueza de especies en el eje X.
+```{r}
+# Cargar los datos de biodiversidad de la paquetería iNEXT
+data(beetles)
+
+# Calcular los índices de diversidad para la muestra "Simpson"
+mydata <- beetles$Simpson
+result <- iNEXT(mydata, q = 0:2, datatype = "abundance", se = TRUE)
+
+# Generar un gráfico con los resultados
+iNEXT.plot(result, type = 1, col = "blue", ci.type = "polygon")
+```
+
+#Funcion iNEXT.boot
+se utiliza para realizar un bootstrapping en los datos de biodiversidad y obtener intervalos de confianza para los índices de diversidad calculados con la función iNEXT().
+
+```{r}
+# Cargar los datos de biodiversidad de la paquetería iNEXT
+data(beetles)
+
+# Calcular los índices de diversidad para la muestra "Simpson"
+mydata <- beetles$Simpson
+result <- iNEXT(mydata, q = 0:2, datatype = "abundance", se = TRUE)
+
+# Realizar un bootstrapping en los datos
+boot <- iNEXT.boot(mydata, q = 0:2, datatype = "abundance", type = "random", B = 100)
+
+# Imprimir los resultados del bootstrapping
+print(boot)
+```
+
+
+#Funcion "iNEXT.individual"
+se utiliza para realizar un análisis de la diversidad individual, lo que permite calcular los índices de diversidad para cada una de las muestras individuales y compararlos entre ellas.
+
+```{r}
+# Cargar los datos de biodiversidad de la paquetería iNEXT
+data(beetles)
+
+# Calcular los índices de diversidad para todas las muestras individuales
+mydata <- beetles[, 3:9]
+result <- iNEXT.individual(mydata, q = 0:2, datatype = "abundance", se = TRUE)
+
+# Imprimir los resultados
+print(result)
+```
 
 
