@@ -249,7 +249,7 @@ gb.site
 library(ggplot2)
 edge.sp <- data.frame(spp.est(t(gb.site),rand = 100, abund = T), 
                       Acumulacion = edge.ac$richeness, 
-                      Habitat = rep("Edge",nrow(gb.edge))plot=T)
+                      Habitat = rep("Edge",nrow(gb.edge)),plot=T)
 
 ggplot(gb.sa,aes(gb.sa$richeness,)) +geom_point() 
    + facet_wrap(~Habitat)
