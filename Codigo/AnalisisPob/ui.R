@@ -1,5 +1,5 @@
 # Header -----------
-header <- dashboardHeader(title = "Medicina de conservación", titleWidth = 300
+header <- dashboardHeader(title = "Análisis de población", titleWidth = 300
   
 )
 
@@ -18,15 +18,12 @@ sidebar <- dashboardSidebar(width = 300,
 body <- dashboardBody(
   tabItems(
     tabItem(tabName = "presentacion",
-            tags$h3(tags$b("Universidad Nacional Autónoma del México"), align = "center"),
-            tags$h3(tags$b("Facultad de Medicina Veterinaria y Zootécnia"), align = "center"),
-            tags$h3(tags$b("Departamento de etología, fauna silvestre y animales de laboratorio"), align = "center"),
-            br(),
             tags$div(style = "text-align: center;",
-            tags$img(src = "leeyus.png", align = "center")),
+                     tags$img(src = "leeyus.png", align = "center", height = 150),
+                     tags$img(src = "dgapa_unam.png", align = "center", height = 150)),
             hr(),
-            tags$h2(tags$b("Plataforma interactiva para la asignatura de prácticas de temas selectos de salud
-                           pública: medicina de conservación y ecología de enfermedades"), align = "center")
+            tags$h2(tags$b("Prácticas de temas selectos de salud pública: medicina de conservación y 
+                           ecología de enfermedades"), align = "center")
             ),
     tabItem(tabName = "PropEdadSexo",
   fluidRow(
