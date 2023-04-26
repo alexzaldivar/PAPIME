@@ -1,0 +1,140 @@
+---
+title: "código unidad Analisis de Comunidades"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+---
+
+
+  - [X] Hacer curva de acumulacion 
+  - [x] Curva de rarefaccion 
+  - [ ] Curvas por sitio para visualizar la contribucion por sitio
+  - [ ] Grafico de barras con indices (shannon(H)) para todas las sitios (sitio~indice)
+  - [ ] dar opcion de comparar dos communidades en cuanto a su numero de especies (abundancia~especie)
+
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library (iNEXT)
+```
+
+# Editar base de datos original a matrix con abundancias por Especie
+```{r}
+#Abundancia de mosquitos  por ESPECIE
+
+abEspecie <- mosquitos %>%
+      group_by(ESPECIE,SITIO) %>% 
+      summarise(ab = n())
+
+#Funcion spread
+bSpread2ESP <-  abEspecie %>% spread(ESPECIE,ab)
+#convertir valores NA a 0 del data frame creado con la nueva variable de abundancia
+bSpread2ESP <- replace(bSpread2ESP , is.na(bSpread2ESP ), 0)
+# convertir a matrix y datos numericos de tipo entero 
+mxESP <- as.matrix(apply(bSpread2ESP [,-1],2,as.integer))
+
+```
+
+# Riqueza de especies por sitio 
+```{r}
+# Calcular la riqueza de especies (numero de especies por sitio)
+species_richness <- specnumber(mxESP)
+# Asignar los nombres
+names(species_richness) <- levels(factor(mosquitos$SITIO))
+
+# Imprimir la riqueza de especies
+species_richness
+```
+
+# Acumulacion de riqueza
+```{r}
+
+# Calcular la curva de acumulación de riqueza de especies
+acum_richness <- specaccum(mxESP,method = "collector")
+
+# Graficar la curva de acumulación de riqueza de especies
+plot(acum_richness, xlab = "Número de muestras", ylab = "Riqueza acumulada",
+     main = "Curva de acumulación de riqueza de especies")
+
+```
+
+
+# Curva de Rerefaccion de especies
+```{r}
+rarecurve(mxESP,  step = 1)
+```
+
+# Rarefacción de la riqueza
+```{r}
+species_richness  # observed number of species
+raremax <- min(rowSums(mxESP))
+Srare <- rarefy(mxESP, raremax)
+
+plot(species_richness, Srare, xlab = "Observed No. of Species", ylab = "Rarefied No. of Species")
+abline(0, 1)
+rarecurve(mxESP, step = 20, sample = raremax, col = "red3", cex = 0.6)
+```
+
+# diversidad Alfa (indice de simpson)
+```{r}
+# Calcular la diversidad alfa de especies
+div_alfa <- diversity( mxESP)
+
+# Imprimir los valores de diversidad alfa
+div_alfa
+
+# Calcular la diversidad alfa de especies para cada comunidad
+div_alfa_com <- diversity(mxESP , index = "simpson")
+
+# Imprimir los valores de diversidad alfa para cada comunidad
+div_alfa_com
+```
+
+# Diversidad Beta
+```{r}
+
+```
+# Curva por sitio paqueteria iNEXT
+```{r}
+#Abundancia de mosquitos 2 por SITIO 
+ab2 <- mosquitos %>%
+      group_by(SITIO,GENERO) %>% 
+      summarise(ab = n())
+
+boxplot(ab ~ GENERO, data = ab)
+
+bSpread2 <- ab2 %>% spread(SITIO,ab)
+#convertir valores NA a 0 del data frame creado con la nueva variable de abundancia
+bSpread2<- replace(bSpread2, is.na(bSpread2), 0)
+# convertir a matrix y datos numericos de tipo entero 
+mxbSpread2 <- as.matrix(apply(bSpread2[,-1],2,as.integer))
+
+# Realizar cálculo y curva
+
+# q= 0 es igual a la  riqueza total de especies
+# q= 1 es igual a la  diversidad total de especies
+# q= 2 es igual a la diversidad de especies abundantes
+
+x2 <- iNEXT(mxbSpread2, q=0, datatype="abundance")
+
+figAlpha2 <-  ggiNEXT(x2, type=1, se=TRUE, facet.var="Both", 
+                      color.var="Assemblage", grey=FALSE)
+
+```
+
+# Curvas por sitio 
+```{r}
+
+```
+
+
+# Indice de Shannon
+```{r}
+
+#Grafico de barras
+```
+
