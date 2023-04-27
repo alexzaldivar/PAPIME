@@ -200,7 +200,48 @@ ggarrange(samplePlot, sampleBar, common.legend = T, legend = 'bottom') %>%
 
 ```{r}
 
+library(pwr)
+
+input$prop <- 0.2
+input$n <- 10000
+input$alpha <- 0.05
+input$power <- 0.8
+
+effect_size <- ES.h(input$prop, input$prop + 0.05)
+
+n <- pwr.2p.test(h = effect_size, n = NULL, sig.level = input$alpha,
+                 power = input$power, alternative = "two.sided")#$n
+
+n
 ```
+
+```{r}
+
+# Gráfico para mostrar el efecto de la proporción en el tamaño de la muestra
+prop_seq <- seq(0.05, 0.5, by = 0.05)
+
+n_values <- sapply(prop_seq, function(p) {
+  effect_size <- ES.h(p, p + 0.05)
+  pwr.2p.test(h = effect_size, n = NULL, sig.level = input$alpha,
+              power = input$power, alternative = "two.sided")$n
+})
+
+plot(prop_seq, n_values, type = "l",
+     xlab = "Proporción esperada", ylab = "Tamaño de muestra necesario")
+
+```
+
+```{r}
+alpha_seq <- seq(0.01, 0.1, by = 0.01)
+
+n_values <- sapply(alpha_seq, function(a) {
+  effect_size <- ES.h(input$prop, input$prop + 0.05)
+  pwr.2p.test(h = effect_size, n = NULL, sig.level = a, power = input$power, alternative = "two.sided")$n
+})
+plot(alpha_seq, n_values, type = "l",
+     xlab = "Nivel de confianza (alpha)", ylab = "Tamaño de muestra necesario")
+```
+
 
 
 ## Prevalencias ponderadas
