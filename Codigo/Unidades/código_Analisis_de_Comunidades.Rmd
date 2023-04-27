@@ -19,6 +19,7 @@ output:
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+library(vegan)
 library (iNEXT)
 ```
 
@@ -100,12 +101,12 @@ div_alfa_com
 ```
 # Curva por sitio paqueteria iNEXT
 ```{r}
-#Abundancia de mosquitos 2 por SITIO 
+#Abundancia de mosquitos por SITIO 
 ab2 <- mosquitos %>%
       group_by(SITIO,GENERO) %>% 
       summarise(ab = n())
 
-boxplot(ab ~ GENERO, data = ab)
+#boxplot(ab2 ~ GENERO, data = ab2)
 
 bSpread2 <- ab2 %>% spread(SITIO,ab)
 #convertir valores NA a 0 del data frame creado con la nueva variable de abundancia
@@ -123,6 +124,11 @@ x2 <- iNEXT(mxbSpread2, q=0, datatype="abundance")
 
 figAlpha2 <-  ggiNEXT(x2, type=1, se=TRUE, facet.var="Both", 
                       color.var="Assemblage", grey=FALSE)
+
+x2$AsyEst %>% ggplot()+ geom_bar(aes(x=Assemblage, y=Observed,fill=Assemblage),
+                                 stat = "identity")+ geom_errorbar(aes(x= Assemblage, ymin = LCL, ymax = UCL), width = 0.5)+facet_wrap(~Diversity)
+
+
 
 ```
 
