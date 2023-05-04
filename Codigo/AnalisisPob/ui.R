@@ -9,7 +9,8 @@ sidebar <- dashboardSidebar(width = 300,
                                         menuItem("Presentación", tabName = "presentacion"),
                                         menuItem("Análisis de población", tabName = "Pob",
                                                  menuSubItem("Características de población", tabName = "PropEdadSexo"),
-                                                 menuSubItem("Muestreo", tabName = "Muestra")
+                                                 menuSubItem("Muestreo", tabName = "Muestra"),
+                                                 menuSubItem("Pruebas estadisticas", tabName = "Estadistica")
                                                  )
                                         )
                             )
@@ -43,7 +44,8 @@ body <- dashboardBody(
   )
   
 )
-)
+),
+tabItem(tabName = 'Estadistica')
 )
 
 

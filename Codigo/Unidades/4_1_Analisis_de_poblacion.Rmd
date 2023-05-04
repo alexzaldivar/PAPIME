@@ -218,7 +218,7 @@ n
 ```{r}
 
 # Gráfico para mostrar el efecto de la proporción en el tamaño de la muestra
-prop_seq <- seq(0.05, 0.5, by = 0.05)
+prop_seq <- seq(0.3, 0.5, by = 0.05)
 
 n_values <- sapply(prop_seq, function(p) {
   effect_size <- ES.h(p, p + 0.05)
@@ -227,7 +227,7 @@ n_values <- sapply(prop_seq, function(p) {
 })
 
 plot(prop_seq, n_values, type = "l",
-     xlab = "Proporción esperada", ylab = "Tamaño de muestra necesario")
+     xlab = "Proporción esperada", ylab = "Tamaño de muestra necesario", ylim = c(0, 2000))
 
 ```
 
@@ -242,9 +242,9 @@ plot(alpha_seq, n_values, type = "l",
      xlab = "Nivel de confianza (alpha)", ylab = "Tamaño de muestra necesario")
 ```
 
-
-
 ## Prevalencias ponderadas
+
+Ponderar las prevalencias en base a los mosquitos, los pesos pueden estar relacionadas con las especies involucradas en la transmision de enfermedades por vectores (i.e dengue)
 
 La prevalencia ponderada es un concepto que se utiliza en ecología para calcular una medida de frecuencia o presencia de una especie en una población o comunidad. La prevalencia ponderada se calcula tomando en cuenta la abundancia o el peso de cada individuo en la población o comunidad.
 
@@ -263,6 +263,7 @@ La suma de pesos es la suma total de las abundancias o pesos de todos los indivi
 En resumen, la prevalencia ponderada es una forma de calcular una medida de frecuencia o presencia de una especie en una población o comunidad, tomando en cuenta su abundancia o peso relativo en la población o comunidad. La fórmula para calcular la prevalencia ponderada es simple y se puede utilizar en una amplia variedad de situaciones en ecología.
 
 La ecología también puede utilizar el concepto de prevalencias ponderadas en algunos casos, pero el cálculo dependerá de los datos específicos que estés trabajando. EJEMPLO:
+
 ```{r}
 # Cargar los datos
 datos <- read.csv("datos_especies.csv", header = TRUE)

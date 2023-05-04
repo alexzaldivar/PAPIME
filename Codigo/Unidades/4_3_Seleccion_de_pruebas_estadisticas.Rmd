@@ -1,6 +1,5 @@
 ---
 title: "Subunidad 4.3 Selección de pruebas estadísticas"
-date: "`r Sys.Date()`"
 output:
   html_document:
     toc: true
@@ -14,3 +13,45 @@ library(dplyr); library(ggplot2); library(ggpubr)
 ```
 
 Subunidad 4.3 Selección de pruebas estadísticas: (pruebas paramétricas y no paramétricas, selección de gráficos y su interpretación)
+
+Agregar opcion de seleccionar dos variables para definir la relacion. 
+
+```{r}
+mosquitos
+```
+
+```{r}
+input$xVar <- 'GENERO'
+input$yVar <- 'x'
+
+is.numeric(mosquitos[,input$yVar])
+is.numeric(mosquitos[,input$xVar])
+
+
+# Grafico simple
+mosquitos %>% 
+  count(!!sym(input$var)) %>% 
+  mutate(p = n/sum(n)) %>% 
+  ggplot() +
+  geom_bar(aes(x = !!sym(input$var), y = p, fill = !!sym(input$var)), stat = 'identity') +
+  labs(title = paste0('Proporción de mosquitos por ', input$var), x = input$var, y = 'Proporción') +
+  th
+```
+
+
+
+# Tipos de graficos
+
+## Scatterplot - Continua~Continua  (Correlacion)
+
+## Boxplot - Dicotomica~Continua (T-test)
+
+## Boxplot - Continua~Categorica (ANOVA)
+
+## Mozaico - Dicotomica~Categorica (Chisq)
+
+## Mozaico - Categorica~Categorica (Chisq)
+
+# Regression
+
+
