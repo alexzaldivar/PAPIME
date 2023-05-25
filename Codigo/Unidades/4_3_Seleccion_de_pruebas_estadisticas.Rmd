@@ -29,12 +29,13 @@ is.numeric(mosquitos[,input$xVar])
 
 
 # Grafico simple
-mosquitos %>% 
-  count(!!sym(input$var)) %>% 
+grafico1 <- mosquitos %>% 
+  count(!!sym(input$xVar)) %>% 
   mutate(p = n/sum(n)) %>% 
   ggplot() +
-  geom_bar(aes(x = !!sym(input$var), y = p, fill = !!sym(input$var)), stat = 'identity') +
-  labs(title = paste0('Proporción de mosquitos por ', input$var), x = input$var, y = 'Proporción') +
+  geom_bar(aes(x = !!sym(input$xVar), y = p, fill = !!sym(input$xVar)), stat = 'identity') +
+  labs(title = paste0('Proporción de mosquitos por ', input$xVar), x = input$xVar, y = 'Proporción') +
+  theme(plot.title = element_text(hjust = 0.5))+
   th
 ```
 
@@ -43,15 +44,135 @@ mosquitos %>%
 # Tipos de graficos
 
 ## Scatterplot - Continua~Continua  (Correlacion)
+```{r}
+mosquitosXtrampa <- mosquitos %>% 
+                      group_by(TRAMPA,ESPECIE) %>% 
+                        summarise(N = n())
+
+graficoScatterplot <- mosquitosXtrampa %>% 
+                        ggplot(aes(x = N, y = TRAMPA, color = ESPECIE)) +
+                        geom_point() + 
+                        labs(title = "Correlación entre el número de mosquitos por trampa",
+                         x = "Número de mosquitos", 
+                         y = "Trampa") + 
+                          theme(plot.title = element_text(hjust = 0.5))+th
+
+
+```
+
 
 ## Boxplot - Dicotomica~Continua (T-test)
+variables dicotomicas de la bd mosquitos: Sexo , Edad
+```{r}
+
+mosquitos$SEXO <- factor(mosquitos$SEXO, levels = c("HEMBRA", "MACHO"))
+
+mosquitos3 <- mosquitos %>% 
+              group_by(TRAMPA, SEXO) %>% 
+              summarise(N = n())
+
+t_test_result <- t.test(N ~ SEXO, data = mosquitos3)
+
+graficoBoxPlot <- mosquitos3 %>%
+                  ggplot(aes(x= SEXO , y=N, fill=SEXO)) + 
+                    geom_boxplot() + 
+                    labs(title = "Boxplot - Dicotomica~Continua ",
+                     x = "", 
+                     y = "Número de mosquitos")+ 
+                     theme(plot.title = element_text(hjust = 0.5))+ th
+```
+
 
 ## Boxplot - Continua~Categorica (ANOVA)
+```{r}
+
+mosquitos4 <- mosquitos %>% 
+              group_by(SITIO, GENERO) %>% 
+              summarise(N = n())
+
+graficoBoxPlot2 <- mosquitos4 %>%
+                   ggplot(aes(x= SITIO , y=N, fill=SITIO)) + 
+                    geom_boxplot() +
+                    labs(title = "Boxplot - Continua~Categorica ",
+                     x = "", 
+                     y = "Número de mosquitos")+ 
+                     theme(plot.title = element_text(hjust = 0.5))+ th
+
+modelo_lm <- lm(N ~ SITIO, data = mosquitos4)
+resultado_anova <- anova(modelo_lm)
+
+
+```
+
 
 ## Mozaico - Dicotomica~Categorica (Chisq)
+```{r}
+
+mosquitos$SEXO <- factor(mosquitos$SEXO, levels = c("HEMBRA", "MACHO"))
+
+mosquitos5 <- mosquitos %>% 
+              group_by(GENERO, SEXO) %>% 
+              summarise(N = n())
+
+graficoMosaico <- mosquitos5 %>%
+                      ggplot() +
+                      geom_tile(aes(x = GENERO, y = SEXO, fill = N)) +
+                      theme_void() +
+                      labs(title = "Gráfico de Mosaico") + 
+                      theme(plot.title = element_text(hjust = 0.5))+th
+
+resultado_chisq <- chisq.test(mosquitos5$SEXO, mosquitos5$GENERO)
+
+#Cuanto mayor sea el valor de chi-cuadrado, mayor será la evidencia de asociación o dependencia entre las variables.
+#df: Los grados de libertad
+
+
+```
+
 
 ## Mozaico - Categorica~Categorica (Chisq)
+```{r}
+
+mosquitos6 <- mosquitos %>% 
+              group_by(GENERO, ESPECIE) %>% 
+              summarise(N = n())
+
+graficoMosaico2 <- mosquitos6 %>%
+                      ggplot() +
+                      geom_tile(aes(x = GENERO, y = ESPECIE, fill = N)) +
+                      theme_void() +
+                      labs(title = "Gráfico de Mosaico") + 
+                      theme(plot.title = element_text(hjust = 0.5))+ th
+
+resultado_chisq <- chisq.test(mosquitos6$GENERO, mosquitos6$ESPECIE)
+
+```
+
 
 # Regression
+```{r}
+mosquitos4 <- mosquitos %>% 
+              group_by(SITIO, GENERO) %>% 
+              summarise(N = n())
+
+modelo_lm <- lm(N ~ SITIO, data = mosquitos4)
+
+summary(modelo_lm)
+
+ic <- predict(modelo_lm)
+
+graficaRegression <- mosquitos4 %>% 
+                      ggplot(aes(x = SITIO, y= N)) + 
+                      geom_smooth(method = "lm", colour = "blue") +
+                      geom_segment(aes(xend=SITIO, yend=ic), 
+                                   col='green', lty='dashed') +
+                      geom_point()+
+                      geom_point( aes(y= ic),col="red")+ 
+                      labs(title = "Regression",
+                            x = "", 
+                            y = "Número de mosquitos") + 
+                      theme(plot.title = element_text(hjust = 0.5))+ th
+```
+
 
 
