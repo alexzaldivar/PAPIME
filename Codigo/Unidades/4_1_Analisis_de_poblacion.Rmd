@@ -135,7 +135,7 @@ mosquitos %>%
 
 ## Densidad poblacional
 
-# La densidad de población es el número promedio de individuos por unidad de área o volumen, en este caso por sitio  
+La densidad de población es el número promedio de individuos por unidad de área o volumen, en este caso por sitio  
 
 Usar un buffer de 10 km de alcance (o usar rango de vuelo)
 
@@ -199,7 +199,6 @@ ggarrange(samplePlot, sampleBar, common.legend = T, legend = 'bottom') %>%
   - Confidecne level
 
 ```{r}
-
 library(pwr)
 
 input$prop <- 0.2
@@ -216,7 +215,6 @@ n
 ```
 
 ```{r}
-
 # Gráfico para mostrar el efecto de la proporción en el tamaño de la muestra
 prop_seq <- seq(0.3, 0.5, by = 0.05)
 
@@ -277,6 +275,7 @@ prevalencia_ponderada <- sum(datos$observadas * peso)
 # Mostrar el resultado
 cat("La prevalencia ponderada de las especies observadas es:", round(prevalencia_ponderada, 2))
 ```
+
 En este ejemplo, cargamos los datos desde un archivo CSV y los almacenamos en un objeto llamado datos. Luego, calculamos el peso para cada especie según su abundancia, dividiendo la columna de abundancia por la suma total de abundancias. A continuación, calculamos la prevalencia ponderada para las especies observadas mediante la fórmula sum(datos$observadas * peso), donde datos$observadas es un vector binario que indica si cada especie fue observada o no. Utilizamos la función cat() para mostrar el resultado.
 
 ## Esfuerzo de muestreo
