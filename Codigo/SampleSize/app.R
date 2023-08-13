@@ -32,8 +32,8 @@ ui <- fluidPage(
             hr(),
             selectInput(inputId = "CL1", choices = list("99" = 99, "95" = 95, "90" = 90), selected = 95, 
                         label = "Nivel de confianza (%): p"),
-            numericInput(inputId = "N1", value = 10000, label = "Tamaño de la Población: N", min = 1,step = 1),
-            numericInput(inputId = "Prev1", value = 50, label = "Prevalencia esperada (%): P"),
+            numericInput(inputId = "N1", value = 20000, label = "Tamaño de la Población: N", min = 1,step = 1),
+            numericInput(inputId = "Prev1", value = 15, label = "Prevalencia esperada (%): P"),
             numericInput(inputId = "E1", value = 10, label = "Error relativo (%): E")
           )
         ),
@@ -51,8 +51,16 @@ ui <- fluidPage(
            DTOutput("Resultados"),
            plotlyOutput("Graph1"),
           withMathJax(),
-          helpText('$$n\\geq \\frac{Z_{1-(\\frac{a}{2})}^2NP_y(1-P_y)}{[(N-1)\\epsilon_{r}^{2}P_{y}^{2}]+
-                   Z_{1-(\\frac{a}{2})}^2P_y(1-P_y)}$$')
+          h5("Esta calculadora del tamaño de la muestra está diseñada para calcular el tamaño mínimo de la 
+             muestra necesario para estimar la prevalencia de una enfermedad en una población. La fórmula utilizada es:"), 
+          helpText('$$n\\geq \\frac{Z_{1-(\\alpha/2)}^2NP_y(1-P_y)}{[(N-1)\\epsilon_{r}^{2}P_{y}^{2}]+
+                   Z_{1-(\\alpha/2)}^2P_y(1-P_y)}$$'),
+          h5("Donde:"),
+          helpText("\\(n=\\) El número de individuos de la muestra."),
+          helpText("\\(N=\\) El tamaño de la población."),
+          helpText("\\(P_y=\\) La prevalencia estimada de la población."),
+          helpText("\\(\\epsilon_r=\\) El error relativo."),
+          helpText("\\(Z_{1-(\\alpha/2)}=\\) Nivel de confianza deseado (curva normal estandar).")
           )
           )
         )
@@ -118,7 +126,7 @@ server <- function(input, output) {
     fig <- plotly::plot_ly(data, x = ~Prevalencia, y = ~n, hoverinfo = 'text', text = ~label, 
                            type = 'scatter', mode = 'lines+markers')
     
-    fig <- fig %>% layout(annotations = a)
+    fig <- fig %>% layout(annotations = a, title = 'Tamaños de muestra alternativos')
     
     fig
     
