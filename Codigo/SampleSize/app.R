@@ -50,13 +50,13 @@ ui <- fluidPage(
           br(),
            DTOutput("Resultados"),
            plotlyOutput("Graph1"),
-          h4("Ecuación:"),
           withMathJax(),
-          h5("La fórmula utilizada para calcular el tamaño de la muestra es:")
+          helpText('$$n\\geq \\frac{Z_{1-(\\frac{a}{2})}^2NP_y(1-P_y)}{[(N-1)\\epsilon_{r}^{2}P_{y}^{2}]+
+                   Z_{1-(\\frac{a}{2})}^2P_y(1-P_y)}$$')
           )
           )
         )
-    )
+)
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
