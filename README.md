@@ -3,7 +3,6 @@
 Este es un repositorio para el proyecto PAPIME, DESARROLLO DE UNA APLICACION INTERACTIVA (SHINY APP) PARA LA ASIGNATURA PRACTICA DE TEMAS SELECTOS DE SALUD PUBLICA:
 MEDICINA DE LA CONSERVACION Y ECOLOGIA DE ENFERMEDADES
 
-
 # Metodologia:
 
 A continuacion se enlistan las subunidades seleccionadas junto con los temas que se pretenden trabajar para el diseño de las aplicaciones web:
@@ -31,9 +30,6 @@ La base de datos se encuentra en el directorio [Datos/Base_Mosquitos.csv/](Datos
 
 El codigo esta dividido por unidad, y el codigo para la applicacion se encuentra en [Codigo/AnalisisPob](Codigo/AnalisisPob)
 
-
-
 # Tasks
 
   - [ ] Agregar contexto de la introduccion
-  - [ ] 

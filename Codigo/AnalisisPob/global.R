@@ -2,6 +2,9 @@ library(shiny)
 library(shinydashboard)
 library(dplyr)
 library(plotly)
+library(DT)
+library(plotly)
+library(mathjaxr)
 
 mosquitos <- read.csv('www/Base_mosquitos.csv')
 

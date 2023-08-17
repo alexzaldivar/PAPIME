@@ -17,7 +17,7 @@ library(vegan); library(dplyr)
 
 # Riqueza de especies
 
-Se utiliza la función `specnumber()` de la librería "vegan" para calcular la riqueza de especies a partir de los datos.Ten en cuenta que `specnumber()` simplemente cuenta el número total de especies presentes en los datos. Si deseas calcular la riqueza de especies en cada comunidad individualmente, puedes utilizar la función `specaccum()` en su lugar.
+Se utiliza la función `specnumber()` de la librería "vegan" para calcular la riqueza de especies a partir de los datos. Ten en cuenta que `specnumber()` simplemente cuenta el número total de especies presentes en los datos. Si deseas calcular la riqueza de especies en cada comunidad individualmente, puedes utilizar la función `specaccum()` en su lugar.
 
 ```{r riqueza datos oscar}
 # Cargar la librería "vegan"

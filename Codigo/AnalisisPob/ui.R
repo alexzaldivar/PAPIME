@@ -8,10 +8,10 @@ sidebar <- dashboardSidebar(width = 300,
                             sidebarMenu(id = "sidebar",
                                         menuItem("Presentación", tabName = "presentacion"),
                                         menuItem("Análisis de población", tabName = "Pob",
-                                                 menuSubItem("Características de población", tabName = "PropEdadSexo"),
-                                                 menuSubItem("Diversidad", tabName = "Diversidad"),
-                                                 menuSubItem("Muestreo", tabName = "Muestra"),
-                                                 menuSubItem("Pruebas estadisticas", tabName = "Estadistica")
+                                                 menuSubItem("Características de población", tabName = "unidad1"),
+                                                 menuSubItem("Diversidad", tabName = "unidad2"),
+                                                 menuSubItem("Muestreo", tabName = "unidad3"),
+                                                 menuSubItem("Pruebas estadisticas", tabName = "unidad4")
                                                  )
                                         )
                             )
@@ -32,7 +32,7 @@ body <- dashboardBody(
     ## Subunidad 1 ------------
     # Analisis de poblaciones: 
     # Proporción de sexo, proporción de edades, densidad poblacional, tamaño mínimo de muestra, prevalencias ponderadas, esfuerzo de muestreo
-    tabItem(tabName = "PropEdadSexo",
+    tabItem(tabName = "unidad1",
             fluidRow(
               ### Seleccion de la variable -----------
               box(
@@ -55,11 +55,44 @@ body <- dashboardBody(
     # Analisis de comunidades:
     # Riqueza, curvas de acumulación de riqueza, rarefacción de riqueza, diversidad alfa, diversidad beta
     tabItem(
-      tabName = 'Diversidad'
-    )
+      tabName = 'unidad2'
+    ),
     ## Unidad 3 -----------------
-),
-tabItem(tabName = 'Estadistica')
+    tabItem(
+      tabName = 'unidad3',
+      box(
+        title = 'Parametros',
+        width = 12,
+        selectInput(inputId = "SampleType", label = "Elige el tamaño de muestra a calcular",
+                    choices = list("Para detectar una enfermedad en una población" = 1,
+                                   "Para estimar una proporción" = 2,
+                                   "Para estimar una media" = 3,
+                                   "Para comparar proporciones" = 4,
+                                   "Para comparar medias" = 5), selected = 1
+        ),
+        conditionalPanel(
+          condition = "input.SampleType == 1",
+          h5("Esta calculadora se utiliza para cuando se quiere muestrear un grupo de animales (N) y estar 
+               seguros de que, con un determinado nivel de confianza, nuestra estimación de prevalencia se acerca 
+               al valor real de la población"),
+          br(),
+          h5(tags$b("Nota:"), "La estimación del tamaño de muestra se fundamenta en la premisa de una prueba de 
+            diagnóstico perfecta, basándose en la detección de la enfermedad en uno o varios animales."),
+          hr(),
+          selectInput(inputId = "CL1", choices = list("99" = 99, "95" = 95, "90" = 90), selected = 95, 
+                      label = "Nivel de confianza (%): p"),
+          numericInput(inputId = "N1", value = 20000, label = "Tamaño de la Población: N", min = 1,step = 1),
+          numericInput(inputId = "Prev1", value = 15, label = "Prevalencia esperada (%): P"),
+          numericInput(inputId = "E1", value = 10, label = "Error relativo (%): E")
+        )
+      )
+    ),
+    
+    ## Unidad 4 --------------
+    tabItem(
+      tabName = 'unidad4'
+    )
+)
 )
 
 
