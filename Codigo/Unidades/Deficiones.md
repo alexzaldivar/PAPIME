@@ -6,7 +6,7 @@ La estructura de esta aplicación se compone de tres secciones distintas. En cad
 
 La base de datos está compuesta por 723 unidades de observación, en la que cada una contiene información sobre el sitio de captura (sitio), número de trampa (trampa), género, nombre de la especie (nombre), sexo y edad del mosquito capurado . 
 
-—---
+---
 ### Riqueza de especies:
 
 ### Diversidad Alfa:
@@ -23,21 +23,24 @@ prevalencia ponderada = (prevalencia * peso) / suma de pesos.
 En este contexto, la "prevalencia" se refiere a la frecuencia o proporción de observaciones de una especie en la población o comunidad, mientras que el "peso" hace referencia a la abundancia o peso de cada individuo de la especie en cuestión en esa población o comunidad. La "suma de pesos" engloba la totalidad de las abundancias o pesos de todos los individuos de todas las especies en la población o comunidad.
 Esta medida ofrece una estimación de la probabilidad de observar una especie particular en un hábitat dado, considerando su importancia relativa en la población.
 
-—-------
+---
 ## Subunidad 4.3
 
-### Pruebas Paramétricas: Estas pruebas estadísticas se basan en supuestos sobre la distribución de los datos, como la normalidad y la homogeneidad de varianzas. Se utilizan cuando los datos cumplen con estos supuestos. Algunas pruebas paramétricas comunes incluyen:
+### Pruebas Paramétricas: 
+Estas pruebas estadísticas se basan en supuestos sobre la distribución de los datos, como la normalidad y la homogeneidad de varianzas. Se utilizan cuando los datos cumplen con estos supuestos. Algunas pruebas paramétricas comunes incluyen:
 - Prueba t de Student: Se utiliza para comparar las medias de dos grupos independientes o relacionados.
 - Análisis de Varianza (ANOVA): Se usa para comparar las medias de tres o más grupos.
 - Regresión lineal: Evalúa la relación entre una variable independiente y una variable dependiente, asumiendo una relación lineal entre ellas.
 
-### Pruebas No Paramétricas: Estas pruebas son apropiadas cuando los datos no cumplen con los supuestos de distribución de las pruebas paramétricas. Se basan en rangos o diferencias entre observaciones. Algunas pruebas no paramétricas son:
+### Pruebas No Paramétricas: 
+Estas pruebas son apropiadas cuando los datos no cumplen con los supuestos de distribución de las pruebas paramétricas. Se basan en rangos o diferencias entre observaciones. Algunas pruebas no paramétricas son:
 - Prueba U de Mann-Whitney: Compara las medianas de dos grupos independientes.
 - Prueba de Kruskal-Wallis: Extiende la comparación de ANOVA a datos no paramétricos con tres o más grupos.
 - Prueba de Wilcoxon: Evalúa la diferencia entre pares de observaciones relacionadas.
 - Prueba de Chi-cuadrada: Esta prueba se emplea para evaluar la relación entre dos variables categóricas.Es útil para investigar si existe una asociación significativa entre dos variables categóricas.
 
-### Selección de Gráficos y su Interpretación: En este contexto, se trata de elegir gráficos adecuados para representar los datos y comprender mejor las relaciones y patrones presentes. Algunos gráficos comunes son:
+### Selección de Gráficos y su Interpretación: 
+En este contexto, se trata de elegir gráficos adecuados para representar los datos y comprender mejor las relaciones y patrones presentes. Algunos gráficos comunes son:
 - Diagramas de dispersión: Muestran la relación entre dos variables continuas.
 - Histogramas: Representan la distribución de una variable continua.
 - Gráficos de barras: Comparan diferentes categorías o grupos.
