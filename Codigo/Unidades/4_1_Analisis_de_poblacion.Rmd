@@ -10,7 +10,7 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning = F, message = F)
 library(dplyr); library(ggplot2); library(ggpubr)
-library(rlang)
+library(rlang); library(plotly)
 
 # Tema para los graficos
 th <- theme(

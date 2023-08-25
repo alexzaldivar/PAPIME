@@ -1,17 +1,15 @@
 Una Shiny App es una aplicación interactiva diseñada para la visualización y modelado de datos de manera dinámica.
 
-Esta Shiny App en particular, tiene como objetivo complementar el proceso de aprendizaje de los estudiantes de Medicina Veterinaria y Zootecnia, en la asignatura práctica de Temas Selectos de Salud Pública: Medicina de la Conservación y Ecología de Enfermedades", a través de un enfoque educativo interactivo.
+Esta Shiny App en particular, tiene como objetivo complementar el proceso de aprendizaje de los estudiantes de Medicina Veterinaria y Zootecnia, en la asignatura práctica de Temas Selectos de Salud Pública: Medicina de la Conservación y Ecología de Enfermedades, a través de un enfoque educativo interactivo.
 
 La estructura de esta aplicación se compone de tres secciones distintas. En cada una de estas secciones se exploran y visualizan diversos análisis de una base de datos tiene registros sobre mosquitos portadores de virus en México.
 
 La base de datos está compuesta por 723 unidades de observación, en la que cada una contiene información sobre el sitio de captura (sitio), número de trampa (trampa), género, nombre de la especie (nombre), sexo y edad del mosquito capurado . 
 
 ---
-### Riqueza de especies:
+## Subunidad 4.1
 
-### Diversidad Alfa:
-
-### Diversidad Beta: 
+### Tamaño mínumo de muestra
 
 ### Densidad de Población:
 La densidad poblacional se refiere al promedio de individuos por unidad de área o volumen, en este contexto, por sitio.
@@ -22,6 +20,15 @@ La fórmula correspondiente es la siguiente:
 prevalencia ponderada = (prevalencia * peso) / suma de pesos. 
 En este contexto, la "prevalencia" se refiere a la frecuencia o proporción de observaciones de una especie en la población o comunidad, mientras que el "peso" hace referencia a la abundancia o peso de cada individuo de la especie en cuestión en esa población o comunidad. La "suma de pesos" engloba la totalidad de las abundancias o pesos de todos los individuos de todas las especies en la población o comunidad.
 Esta medida ofrece una estimación de la probabilidad de observar una especie particular en un hábitat dado, considerando su importancia relativa en la población.
+
+---
+## Subunidad 4.1 Análisis de población"
+
+### Riqueza de especies:
+
+### Diversidad Alfa:
+
+### Diversidad Beta: 
 
 ---
 ## Subunidad 4.3

@@ -27,8 +27,18 @@ body <- dashboardBody(
             hr(),
             tags$h2(tags$b("Prácticas de temas selectos de salud pública: medicina de conservación y 
                            ecología de enfermedades"), align = "center"),
-            'Aqui va el contexto'
-            ),
+            br(),br(),br(),
+            
+            tags$div("Una Shiny App es una aplicación interactiva diseñada para la visualización y modelado de datos de manera dinámica.
+
+Esta Shiny App en particular, tiene como objetivo complementar el proceso de aprendizaje de los estudiantes de Medicina Veterinaria y Zootecnia, en la asignatura práctica de Temas Selectos de Salud Pública: Medicina de la Conservación y Ecología de Enfermedades, a través de un enfoque educativo interactivo.
+
+La estructura de esta aplicación se compone de tres secciones distintas. En cada una de estas secciones se exploran y visualizan diversos análisis de una base de datos tiene registros sobre mosquitos portadores de virus en México.
+
+La base de datos está compuesta por 723 unidades de observación, en la que cada una contiene información sobre el sitio de captura (sitio), número de trampa (trampa), género, nombre de la especie (nombre), sexo y edad del mosquito capurado .")
+           ),
+    
+    
     ## Subunidad 1 ------------
     # Analisis de poblaciones: 
     # Proporción de sexo, proporción de edades, densidad poblacional, tamaño mínimo de muestra, prevalencias ponderadas, esfuerzo de muestreo

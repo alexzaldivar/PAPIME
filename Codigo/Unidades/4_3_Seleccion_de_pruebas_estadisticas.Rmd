@@ -174,5 +174,71 @@ graficaRegression <- mosquitos4 %>%
                       theme(plot.title = element_text(hjust = 0.5))+ th
 ```
 
+```{r}
+library(summarytools)
+library(psych)
+```
+
+
+Proporciones = Evaluar si la prevalencia de hembras es diferente al 50%
+```{r}
+count_F <-sum(mosquitos$SEXO == "HEMBRA")
+n <- nrow(mosquitos)
+resultadoProporciones <- prop.test(count_F, n, 
+                                   p = 0.5, alternative = "two.sided")
+```
+
+Comparar 2 poblaciones
+```{r}
+library(car)
+mosquitos4 <- mosquitos %>% 
+              group_by(SITIO) %>% 
+              summarise(N = n())
+
+#Prubes de homegeneidad de varianzas
+leveneTest(N ~ SITIO, data = mosquitos4)
+
+# si hay homegeneidad = T de Student
+result <- t.test(df_HFD$Peso, df_LFD$Peso, alternative = "greater", var.equal
+= TRUE)
+
+#Si no hay homegeneidad = T de Welch
+result <- t.test(df_HFD$Peso, df_LFD$Peso, alternative = "greater", var.equal
+= FALSE)
+
+```
+
+MAS DE 2 GRUPOS analisis de varianzas de un factor 
+prueba de normalidad - pruba de shapiro wilk
+```{r}
+library(multcomp)
+
+# Se aplica la prueba a cada grupo por separado
+
+groups <- unique(mosquitos$SITIO) for (mosquitos in SITIO)
+
+{ print(paste("Prueba de Shapiro-Wilk para el sitio", SITIO))
+print(shapiro.test(mosquitos$SITIO[mosquitos$SITIO == SITIO]))}
+
+
+```
+
+
+pruba de Tukey comparacion multiple se aplica cuando hay medias diefrentes
+
+```{r}
+#ANOVA
+anova_result <- aov(GDP ~ Group, data = datos)summary(anova_result)
+
+# Prueba post-hoc de Tukey si la ANOVA es significative
+
+tukey_result <- glht(anova_result, linfct = mcp(Group =
+"Tukey"))summary(tukey_result)
+```
+
+
+
+
+
 
 
