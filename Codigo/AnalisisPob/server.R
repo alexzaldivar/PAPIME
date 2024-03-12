@@ -89,5 +89,63 @@ function(input, output){
       theme_minimal()
   })
   
+  # Gráfico de pastel
+  output$plotPastel <- renderPlot({
+    data <- especies_aves
+    if (input$areaSeleccionada != "Todas") {
+      data <- data[data$AreaProtegida == input$areaSeleccionada, ]
+    }
+    dataSum <- aggregate(Cantidad ~ Categoria, data, sum)
+    
+    ggplot(dataSum, aes(x="", y=Cantidad, fill=Categoria)) +
+      geom_bar(width = 1, stat = "identity") +
+      coord_polar("y", start=0) +
+      theme_void() +
+      labs(fill="Categoría", title=paste("Proporción de Categorías de Aves en", input$areaSeleccionada))
+  })
+  
+  # Gráfico de área apilada
+  output$plotArea <- renderPlot({
+    data <- especies_aves
+    if (input$areaSeleccionada != "Todas") {
+      data <- data[data$AreaProtegida == input$areaSeleccionada, ]
+    }
+    
+    ggplot(data, aes(x=Fecha, y=Cantidad, fill=Categoria)) +
+      geom_area(position='stack') +
+      labs(x="Fecha", y="Cantidad", fill="Categoría", title=paste("Estacionalidad de Especies de Aves en", input$areaSeleccionada)) +
+      theme_minimal() +
+      scale_x_date(date_labels="%b", date_breaks="1 month") +
+      theme(axis.text.x=element_text(angle=45, hjust=1))
+  })
+  
+  datosFiltrados <- reactive({
+    datos <- especies_aves
+    if (input$area != "Todas") {
+      datos <- datos[datos$AreaProtegida == input$area, ]
+    }
+    datos
+  })
+  
+  output$boxplot <- renderPlot({
+    ggplot(datosFiltrados(), aes(x = AreaProtegida, y = Cantidad2, fill = AreaProtegida)) + 
+      geom_boxplot() + 
+      theme_minimal() + 
+      labs(title = "Distribución de Cantidad de Observaciones por Área Protegida",
+           y = "Cantidad de Observaciones", x = "Área Protegida") +
+      scale_fill_discrete(name = "Área Protegida")
+  })
+  
+  output$histograma <- renderPlot({
+    ggplot(datosFiltrados(), aes(x = Cantidad2, fill = AreaProtegida)) + 
+      geom_histogram(bins = 30, color = "black") + 
+      theme_minimal() + 
+      facet_wrap(~AreaProtegida, ncol = 3) +
+      labs(title = "Histograma de Cantidad de Observaciones por Área Protegida",
+           x = "Cantidad de Observaciones", y = "Frecuencia") +
+      scale_fill_discrete(name = "Área Protegida")
+  })
+  
+  
 } %>% 
   shinyServer()
