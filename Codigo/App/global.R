@@ -10,7 +10,7 @@ library(mc2d)
 library(ggplot2)
 library(mathjaxr)
 
-mosquitos <- read.csv('www/Base_mosquitos.csv')
+mosquitos <- read.csv('data/Base_mosquitos.csv')
 
 # create ids in a grid
 nr <- ceiling(sqrt(nrow(mosquitos))) # Create combinations for the (x,y) grid

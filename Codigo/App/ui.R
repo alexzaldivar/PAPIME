@@ -297,11 +297,9 @@ body <- dashboardBody(
                    )
             )
             ),
-    
     ## Subunidad 4.3 Pruebas paramétricas y no paramétricas --------------
     tabItem(tabName = "Sub4_3_2",
-            wellPanel(
-              tags$h3(tags$b("Introducción a las pruebas paramétricas y no paramétricas"), align ="center"),
+            box(title = "Introducción a las pruebas paramétricas y no paramétricas", width = 12, collapsed = TRUE, collapsible = TRUE, solidHeader = TRUE, status = "primary",
               tags$h4("Las pruebas paramétricas se basan en supuestos específicos sobre la distribución de los datos, 
                       como la normalidad y la homogeneidad de la varianza, lo que las hace más potentes cuando se cumplen estos supuestos. 
                       Por otro lado, las pruebas no paramétricas son más flexibles y no requieren supuestos estrictos sobre la distribución 
@@ -321,29 +319,40 @@ body <- dashboardBody(
                     que en el área con baja diversidad. Esto se basa en la idea de que una mayor variedad de especies puede ejercer un efecto regulador sobre 
                     la transmisión de enfermedades al limitar la concentración de huéspedes susceptibles."),
               tags$h4("Hipótesis de asociaciones: Ahora, consideremos cómo la diversidad de especies puede estar asociada con la prevalencia de enfermedades en este entorno. 
-                      Planteamos la hipótesis de que existe una relación entre la diversidad de únicamente los mamíferos y la prevalencia de enfermedades en todas las especies. 
+                      Planteamos la hipótesis de que existe una", tags$b("asociación"), "entre la diversidad de los mamíferos y la prevalencia. 
                       Más específicamente, anticipamos que a medida que aumenta la diversidad de especies de mamíferos en un área determinada, es probable que la prevalencia de ciertas enfermedades disminuya. 
                       Esto podría deberse a una menor interacción entre especies hospederas y patógenos, reduciendo así las oportunidades de transmisión. 
-                      Sin embargo, reconocemos que esta asociación podría variar según el tipo de enfermedad y otros factores ambientales y ecológicos."),
+                      Sin embargo, reconocemos que esta asociación podría variar según el tipo de enfermedad y otros factores ambientales y ecológicos.")),
               br(),
-            radioGroupButtons(size = "lg", justified = TRUE,
-                              inputId = "Pruebas1", label = tags$h4(tags$b("1. Mi hipotesis es acerca de:")), 
+            fluidRow(
+              column(width = 5, 
+            radioGroupButtons(inputId = "Pruebas1", label = tags$h4(tags$b("1. Mi hipotesis es acerca de:")), justified = TRUE,
                               choices = list("Diferencias" = 1, "Asociaciones" = 2),
                               selected = 0,status = "primary"),
             br(),
             conditionalPanel("input.Pruebas1 == 1",
-                             tags$h4("Cualitativa: Clasificar las áreas en: `afectadas por enfermedades` o `libres de enfermedades`, 
-                                     podemos analizar si existe una diferencia significativa en la prevalencia de la enfermedad entre un área con alta diversidad 
-                                     de especies y el área con baja diversidad."),
-                             tags$h4("Cuantitativa: Al medir los casos de enfermedades por unidad de área o por número de individuos en la población, podemos 
-                                     medir la magnitud de la diferencia en la prevalencia de enfermedades entre las áreas con alta y baja diversidad."),
-                             radioGroupButtons(size = "lg", justified = TRUE,
-                                               inputId = "PruebasDif1", label = tags$h4(tags$b("2. Mi variable dependiente es:")), 
-                                               choices = list("Cuantitativa" = 1, "Cualitativa" = 2),
+                             radioGroupButtons(inputId = "PruebasDif1", label = tags$h4(tags$b("2. Mi variable dependiente es:")), 
+                                               justified =  TRUE, choices = list("Cuantitativa" = 1, "Cualitativa" = 2),
+                                               selected = 0,status = "primary"),
+                             helpText("Nota: La prevalencia de la enfermedad en cada área sería un ejemplo de una variable cuantitativa, mientras que
+                                      el tipo de hábitat, como bosque denso versus pradera abierta, representaría una variable cualitativa.")),
+            conditionalPanel("input.Pruebas1 == 2",
+                             radioGroupButtons(inputId = "PruebasAso1", label = tags$h4(tags$b("2. Mi hipótesis de asociación es:")), 
+                                               justified =  TRUE, choices = list("Simétrica" = 1, "Asimétrica" = 2),
+                                               selected = 0,status = "primary"),
+                             helpText("Nota: Una hipótesis simétrica implica que no hay diferencia entre dos grupos en estudio, por ejemplo, 
+                                      se espera que la prevalencia sea la misma en ambos grupos de hábitat. Por otro lado, una hipótesis 
+                                      asimétrica sugerirían que si existen diferencias de prevalencia entre los grupos de hábitat")),
+            conditionalPanel("input.PruebasDif1 == 1 & input.Pruebas1 == 1",
+                             radioGroupButtons(inputId = "PruebasDifQ", label = tags$h4(tags$b("2. Mi hipótesis es acerca de diferencias de:")), 
+                                               justified =  TRUE, choices = list("Media/tendencia central" = 1, 
+                                                                                 "Varianza/dispersión" = 2,"tipo de distribución" = 3),
                                                selected = 0,status = "primary")
+                               
+                               
                              )
             )
-            
+            )
             )
     )
 )
