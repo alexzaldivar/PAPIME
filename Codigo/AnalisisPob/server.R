@@ -1,11 +1,8 @@
 # Server --------------
 function(input, output){
   
-  # Reactividad ------------
-  
-  
-  
-  # Outputs ------------
+
+  ###### Subunidad 4.1. Analisis de poblacion  ------
   output$Bar <- renderPlotly({
     # Grafico con intervalos
     p <- mosquitos %>% 
@@ -32,6 +29,72 @@ function(input, output){
 
     ggplotly(p)
   })
+  
+  ###### Subunidad 4.1. Tamaño mínimo de muestra ------
+  
+  n <- reactive({
+    Z <- qnorm(1 - (1-(as.numeric(input$CL1)/100))/2)^2
+    P <- input$Prev1/100
+    E <- input$E1/100
+    
+    n <- round((Z * input$N1 * P * (1-P)) / (((input$N1-1) * E^2 * P^2) + Z * P * (1-P)))
+    
+  })
+  
+  output$Resultados <- renderDT({
+    datatable(data.frame(
+      n = n(),
+      DiseasedAnim = (input$Prev1*input$N1)/100,
+      FracSamp = (n()/input$N1)*100), 
+      rownames = FALSE, 
+      options = list(paging=FALSE, searching=FALSE,
+                     columnDefs = list(
+                       list(targets = 0, title = "Tamaño mínimo de muestra"),
+                       list(targets = 1, title = "Número de animales enfermos"),
+                       list(targets = 2, title = "Fracción de muestreo (%)")
+                     )
+      )
+    )
+  })
+  
+  output$Graph1 <- renderPlotly({
+    Z <- qnorm(1 - (1-(as.numeric(input$CL1)/100))/2)^2
+    E <- input$E1/100
+    prev <- seq(0.01:1, by= 0.01)
+    
+    result <- c()
+    
+    for (i in prev) {
+      n <- round((Z * input$N1 * prev * (1-prev)) / (((input$N1-1) * E^2 * prev^2) + Z * prev * (1-prev)))
+      result <- c(n)
+    }
+    
+    data <- data.frame(Prevalencia = prev*100,
+                       n = result,
+                       label = paste("Prevalencia: ", prev*100, "%", "<br>",
+                                     "n: ",result))
+    a <- list(
+      x = input$Prev1,
+      y = n(),
+      text = paste("Prevalencia: ", input$Prev1,"%", "<br>",
+                   "n: ",n()),
+      xref = "x",
+      yref = "y",
+      showarrow = TRUE,
+      arrowhead = 7,
+      ax = 50,
+      ay = -30
+    )
+    
+    fig <- plotly::plot_ly(data, x = ~Prevalencia, y = ~n, hoverinfo = 'text', text = ~label, 
+                           type = 'scatter', mode = 'lines+markers')
+    
+    fig <- fig %>% layout(annotations = a, title = 'Tamaños de muestra alternativos')
+    
+    fig
+    
+  })
+  
   
   
   ## Subunidad 4.3 --------------
@@ -119,31 +182,48 @@ function(input, output){
       theme(axis.text.x=element_text(angle=45, hjust=1))
   })
   
-  datosFiltrados <- reactive({
-    datos <- especies_aves
-    if (input$area != "Todas") {
-      datos <- datos[datos$AreaProtegida == input$area, ]
-    }
-    datos
-  })
   
   output$boxplot <- renderPlot({
-    ggplot(datosFiltrados(), aes(x = AreaProtegida, y = Cantidad2, fill = AreaProtegida)) + 
+    
+    if (input$Variables == 1) {
+      
+    ggplot(especies_aves, aes(x = AreaProtegida, y = Cantidad2, fill = AreaProtegida)) + 
       geom_boxplot() + 
       theme_minimal() + 
-      labs(title = "Distribución de Cantidad de Observaciones por Área Protegida",
-           y = "Cantidad de Observaciones", x = "Área Protegida") +
-      scale_fill_discrete(name = "Área Protegida")
+      labs(title = "Distribución de frecuencia de observaciones por área protegida",
+           y = "Cantidad de observaciones", x = "Área protegida") +
+      scale_fill_discrete(name = "Área protegida")
+    } else {
+    
+      ggplot(especies_aves, aes(x = Categoria, y = Cantidad2, fill = Categoria)) + 
+        geom_boxplot() + 
+        theme_minimal() + 
+        labs(title = "Distribución de frecuencia de observaciones por categoria de aves",
+             y = "Cantidad de observaciones", x = "Categoria de aves") +
+        scale_fill_discrete(name = "Categorias")
+    }
   })
   
   output$histograma <- renderPlot({
-    ggplot(datosFiltrados(), aes(x = Cantidad2, fill = AreaProtegida)) + 
-      geom_histogram(bins = 30, color = "black") + 
+    
+    if (input$Variables == 1) {
+    ggplot(especies_aves, aes(x = Cantidad2, fill = AreaProtegida)) + 
+      geom_density(alpha = 0.7, color = "black") + 
       theme_minimal() + 
       facet_wrap(~AreaProtegida, ncol = 3) +
-      labs(title = "Histograma de Cantidad de Observaciones por Área Protegida",
-           x = "Cantidad de Observaciones", y = "Frecuencia") +
+      labs(title = "Histograma de observaciones por área protegida",
+           y = "Cantidad de observaciones", x = "Área protegida") +
       scale_fill_discrete(name = "Área Protegida")
+    }else {
+      ggplot(especies_aves, aes(x = Cantidad2, fill = Categoria)) + 
+        geom_density(alpha = 0.7, color = "black") + 
+        theme_minimal() + 
+        facet_wrap(~Categoria, ncol = 3) +
+        labs(title = "Histograma de observaciones por categoria de aves",
+             y = "Cantidad de observaciones", x = "Categoria de aves") +
+        scale_fill_discrete(name = "Categorias")
+      
+    }
   })
   
   

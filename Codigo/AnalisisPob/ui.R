@@ -5,7 +5,9 @@ header <- dashboardHeader(title = "Medicina de conservación y ecologia de enfer
 sidebar <- dashboardSidebar(width = 300,
                             sidebarMenu(id = "sidebar",
                                         menuItem("Presentación", tabName = "presentacion", icon = icon ("circle-info")),
-                                        menuItem("Análisis de población", tabName = "Sub4_1", icon = icon("feather-pointed")),
+                                        menuItem("Análisis de población", tabName = "Sub4_1", icon = icon("feather-pointed"),
+                                                 menuSubItem("Estructura de la población", tabName = "Sub4_1_1"),
+                                                 menuSubItem("Tamaño de muestra", tabName = "Sub4_1_2")),
                                         menuItem("Análisis de comunidades", tabName = "Sub4_2", icon = icon("circle-nodes")),
                                         menuItem("Selección de herramientas estadísticas", tabName = "Sub4_3", icon = icon("chart-pie"),
                                                  menuSubItem("Gráficos", tabName = "Sub4_3_1"),
@@ -52,10 +54,10 @@ body <- dashboardBody(
             ),
     
     
-    ## Subunidad 1 ------------
+    ## Subunidad 4.1 ------------
     # Analisis de poblaciones: 
     # Proporción de sexo, proporción de edades, densidad poblacional, tamaño mínimo de muestra, prevalencias ponderadas, esfuerzo de muestreo
-    tabItem(tabName = "Sub4_1",
+    tabItem(tabName = "Sub4_1_1",
             fluidRow(
               ### Seleccion de la variable -----------
               box(
@@ -74,6 +76,49 @@ body <- dashboardBody(
               )
             )
           ),
+    tabItem(
+      tabName = "Sub4_1_2",
+      wellPanel(
+        tags$h3(tags$b("Calculadora del tamaño de muestra en poblaciones"), align ="center"),
+        tags$h4("Esta calculadora se utiliza para cuando se quiere muestrear un grupo de animales (N) y estar 
+               seguros de que, con un determinado nivel de confianza, nuestra estimación de prevalencia se acerca 
+               al valor real de la población"),
+        helpText("Nota: La estimación del tamaño de muestra se fundamenta en la premisa de una prueba de 
+            diagnóstico perfecta, basándose en la detección de la enfermedad en uno o varios animales.")),
+      fluidRow(
+        column(width = 3,
+               h4(tags$b("Parámetros para calcular el tamaño de muestra")),
+               selectInput(inputId = "CL1", choices = list("99" = 99, "95" = 95, "90" = 90), selected = 95, 
+                           label = "Nivel de confianza (%): p"),
+               numericInput(inputId = "N1", value = 20000, label = "Tamaño de la Población: N", min = 1,step = 1),
+               numericInput(inputId = "Prev1", value = 15, label = "Prevalencia esperada (%): P"),
+               numericInput(inputId = "E1", value = 10, label = "Error relativo (%): E")
+               ),
+        column(width = 9,
+               wellPanel(
+               h4(tags$b("Por ejemplo:")),
+               h4("Se desea saber cuántos venados en una UMA se deben muestrear y analizar 
+             para estar seguros al 95% de que nuestra estimación de prevalencia se sitúa dentro del 10% del 
+             valor real de la población. Se cree que la prevalencia esperada en una población de 
+             venados es del orden del 15%. El tamaño de la población en la UMA (N) es de 20,000 venados"),
+             br(),
+             DTOutput("Resultados"),
+             plotlyOutput("Graph1"),
+             withMathJax(),
+             h5("Esta calculadora del tamaño de la muestra está diseñada para calcular el tamaño mínimo de la 
+             muestra necesario para estimar la prevalencia de una enfermedad en una población. La fórmula utilizada es:"), 
+             helpText('$$n\\geq \\frac{Z_{1-(\\alpha/2)}^2NP_y(1-P_y)}{[(N-1)\\epsilon_{r}^{2}P_{y}^{2}]+
+                   Z_{1-(\\alpha/2)}^2P_y(1-P_y)}$$'),
+             h5("Donde:"),
+             helpText("\\(n=\\) El número de individuos de la muestra."),
+             helpText("\\(N=\\) El tamaño de la población."),
+             helpText("\\(P_y=\\) La prevalencia estimada de la población."),
+             helpText("\\(\\epsilon_r=\\) El error relativo."),
+             helpText("\\(Z_{1-(\\alpha/2)}=\\) Nivel de confianza deseado (curva normal estandar).")
+             )
+        )
+        )
+      ),
     ## Unidad 2 -----------------
     # Analisis de comunidades:
     # Riqueza, curvas de acumulación de riqueza, rarefacción de riqueza, diversidad alfa, diversidad beta
@@ -111,7 +156,7 @@ body <- dashboardBody(
       )
     ),
     
-    ## Subunidad 4.3 --------------
+    ## Subunidad 4.3 Gráficos --------------
     tabItem(tabName = "Sub4_3_1",
             wellPanel(
             tags$h3(tags$b("Objetivo de los gráficos"), align ="center"),
@@ -137,13 +182,13 @@ body <- dashboardBody(
                                      como esa incidencia evoluciona a lo largo de un periodo de tiempo."),
                              selectInput("S431_g1reg", "Selecciona el sitio de muestreo:", choices = regiones),
                              selectInput("S431_g1esp", "Seleccione la especie:", choices = especies, multiple = TRUE, selected = especies),
-                             helpText("Un gráfico de barras es una herramienta visual utilizada para representar datos categóricos con barras rectangulares 
+                             helpText("Gráfico de barras: son una herramienta visual utilizada para representar datos categóricos con barras rectangulares 
                                       cuyas longitudes son proporcionales a los valores que representan. Este tipo de gráfico es particularmente útil para 
                                       comparar información entre diferentes grupos o categorías de manera clara y directa. Las barras pueden orientarse 
                                       tanto horizontal como verticalmente, ofreciendo una comparación fácil de entender de cantidades o números entre diferentes 
                                       categorías. Por ejemplo, un gráfico de barras puede usarse para mostrar la cantidad de ventas de diferentes productos, 
                                       facilitando la identificación del producto más o menos vendido en un periodo específico."),
-                             helpText("Un gráfico de línea, por otro lado, es ideal para mostrar tendencias o cambios en los datos a lo largo del tiempo, 
+                             helpText("Gráfico de línea: el gráfico es ideal para mostrar tendencias o cambios en los datos a lo largo del tiempo, 
                                       conocido también como línea temporal. Este gráfico utiliza puntos conectados por líneas para representar la evolución 
                                       de una o más variables numéricas. La línea temporal permite a los espectadores ver rápidamente cómo los valores cambian 
                                       en un intervalo, identificar picos o caídas en los datos y observar tendencias a largo plazo. Este tipo de visualización 
@@ -166,7 +211,7 @@ body <- dashboardBody(
                                      de la enfermedad."),
                              selectInput("S431_g2reg", label = "Seleccione el sitio de muestreo:", choices = regiones),
                              selectInput("S431_g2esp", label = "Seleccione la especie:",choices = especies, multiple = TRUE, selected = especies),
-                             helpText("Los gráficos de dispersión, también conocido como scatterplot, son una herramienta visual utilizada en estadística y 
+                             helpText("Gráficos de dispersión (scatterplot): son una herramienta visual utilizada en estadística y 
                                      análisis de datos para representar la relación entre dos variables numéricas. Este tipo de gráfico muestra puntos de datos 
                                      en un sistema de coordenadas cartesianas, donde cada eje representa una de las variables en estudio. 
                                      La posición de cada punto en el gráfico indica los valores de las dos variables para un dato en particular."),
@@ -191,11 +236,11 @@ body <- dashboardBody(
                                      migratorias y residentes, lo que te proporcionaría información sobre la diversidad y la estructura de 
                                      la comunidad de aves en el área de estudio."),
                              selectInput("areaSeleccionada",  label = "Seleccione el Área Protegida:", choices = c("Todas", unique(especies_aves$AreaProtegida))),
-                             helpText("El gráfico de pastel divide un círculo en sectores que representan proporciones de un total, ideal para visualizar 
+                             helpText("Gráfico de pastel: El gráfico divide un círculo en sectores que representan proporciones de un total, ideal para visualizar 
                                       la composición porcentual de categorías dentro de un conjunto, como la distribución del mercado entre diferentes empresas. 
                                       Su simplicidad facilita la identificación de las partes más grandes del todo, pero puede complicarse con muchas categorías 
                                       o diferencias pequeñas."),
-                             helpText("El gráfico de área apilada muestra la evolución de múltiples variables a lo largo del tiempo, apilando los valores para 
+                             helpText("Gráfico de área apilada: El gráfico muestra la evolución de múltiples variables a lo largo del tiempo, apilando los valores para 
                                       reflejar el total y la contribución relativa de cada categoría. Permite observar tendencias generales y cambios en la 
                                       composición de esas categorías, útil para analizar cómo varios segmentos contribuyen a un agregado a lo largo del tiempo."),
                              hr(),
@@ -206,10 +251,20 @@ body <- dashboardBody(
                              tags$h4(tags$b("Gráficos de distribución: "), "En el análisis de datos, estos gráficos muestran la distribución de una variable 
                                      en una población, ayudando a comprender cómo se distribuyen los valores y si existen patrones o 
                                      desviaciones significativas."),
-                             tags$h4("Ejemplo: Un histograma podría utilizarse para representar la distribución de tamaños de colonias de 
-                                     un patógeno en una población de huéspedes. Esto podría revelar si la carga parasitaria sigue una distribución normal 
-                                     o si existen anomalías en la distribución que podrían indicar factores subyacentes."),
-                             selectInput("area", "Seleccione el Área Protegida:",choices = c("Todas", unique(especies_aves$AreaProtegida))))),
+                             tags$h4("Ejemplo: Un histograma podría utilizarse para representar la distribución del número de observaciones de aves en un área natural protegida. 
+                                     Esto podría revelar si el número de avistamientos sigue una distribución normal entre sitios o si existen anomalías en la distribución que podrían indicar factores subyacentes."),
+                             selectInput("Variables", "Seleccione la variable a mostrar:",choices = list("Area protegida" = 1, "Categoria de especie" = 2)),
+                             helpText("Boxplot (Diagrama de caja): Este gráfico muestra la distribución de un conjunto de datos y resalta su mediana, cuartiles y valores atípicos. 
+                                      La línea central de cada caja indica la mediana de los datos, mientras que los bordes de la caja representan el primer y tercer cuartil. 
+                                      Las líneas que se extienden desde las cajas (bigotes) indican la variabilidad fuera de los cuartiles superiores e inferiores, 
+                                      y cualquier punto fuera de estos representa un valor atípico, indicando datos que difieren significativamente del resto de la distribución."),
+                             helpText("Histograma de densidad: Es una representación gráfica de la distribución de un conjunto de datos que muestra la frecuencia de observaciones dentro de un rango específico. 
+                                      La línea del histograma representa la frecuencia (cantidad de veces que ocurren) de datos dentro de un intervalo particular. Los histogramas son útiles para entender la 
+                                      forma de la distribución de los datos, como identificar si la distribución es simétrica, sesgada, tiene uno o varios picos, etc."),
+                             hr(),
+                             tags$h4(tags$b("Preguntas para análisis e interpretación: "), "Cambia las variables para analizar la información presentada en las gráficas:"),
+                             tags$h4("¿Qué áreas protegidas muestran una mayor variabilidad en la cantidad de observaciones de aves?"),
+                             tags$h4("¿Cómo difieren las distribuciones de las observaciones entre áreas protegidas y categorías?"))),
             column(width = 6,
                    conditionalPanel("input.S4_3_1Grafico == 1",
                                     tags$h4(tags$b("Promedio de incidencia entre especies y sitios (gráfico de barras)"), align="center"),
@@ -232,18 +287,66 @@ body <- dashboardBody(
                                     plotOutput("plotArea")
                    ),
                    conditionalPanel("input.S4_3_1Grafico == 4",
-                                    tags$h4(tags$b("Distribución de Aves por Tipo: Migratorias, Endémicas y Residentes (gráfico de pastel)"), align="center"),
+                                    tags$h4(tags$b("Distribución de observaciones de aves (boxplot)"), align="center"),
                                     plotOutput("boxplot"),
                                     br(),
-                                    tags$h4(tags$b("Evolución Anual de Observaciones: Aves Migratorias, Endémicas y Residentes (gráfico de área apilada)"), align="center"),
+                                    tags$h4(tags$b("Distribución de observaciones de aves (histograma de densidad)"), align="center"),
                                     plotOutput("histograma")
                                     )
                    )
                    )
             )
+            ),
+    
+    ## Subunidad 4.3 Pruebas paramétricas y no paramétricas --------------
+    tabItem(tabName = "Sub4_3_2",
+            wellPanel(
+              tags$h3(tags$b("Introducción a las pruebas paramétricas y no paramétricas"), align ="center"),
+              tags$h4("Las pruebas paramétricas se basan en supuestos específicos sobre la distribución de los datos, 
+                      como la normalidad y la homogeneidad de la varianza, lo que las hace más potentes cuando se cumplen estos supuestos. 
+                      Por otro lado, las pruebas no paramétricas son más flexibles y no requieren supuestos estrictos sobre la distribución 
+                      de los datos, lo que las hace útiles cuando los datos no siguen una distribución normal o cuando se trabaja con muestras 
+                      pequeñas."),
+              tags$h4("La elección adecuada entre estos dos tipos de pruebas impacta directamente en la interpretación de resultados y, 
+                      en última instancia, en las decisiones de aplicación de medidas de conservación y control de enfermedades. Esta aplicación 
+                      proporcionará una comprensión clara de ambos tipos de pruebas y te orientará sobre la elección del análisis de datos en 
+                      ecología de enfermedades y medicina de conservación."),
+              hr(),
+              tags$h3(tags$b("Hagamos un ejemplo:"), align ="center"),
+              tags$h4("Supongamos que estamos estudiando la relación entre la diversidad de especies y la prevalencia de una enfermedad en esa misma área. 
+                    En este caso, podríamos plantear dos hipótesis:"),
+              tags$h4("Hipótesis de diferencias: Para nuestro estudio seleccionamos dos áreas, una densamente poblada por especies diversas y otra con una diversidad limitada. 
+                    La hipótesis que planteamos es que encontraremos", tags$b("diferencias"), "significativas en la prevalencia de enfermedades entre estas dos áreas. 
+                    Específicamente, esperamos que en el área con alta diversidad de especies, la prevalencia de enfermedades sea significativamente menor 
+                    que en el área con baja diversidad. Esto se basa en la idea de que una mayor variedad de especies puede ejercer un efecto regulador sobre 
+                    la transmisión de enfermedades al limitar la concentración de huéspedes susceptibles."),
+              tags$h4("Hipótesis de asociaciones: Ahora, consideremos cómo la diversidad de especies puede estar asociada con la prevalencia de enfermedades en este entorno. 
+                      Planteamos la hipótesis de que existe una relación entre la diversidad de únicamente los mamíferos y la prevalencia de enfermedades en todas las especies. 
+                      Más específicamente, anticipamos que a medida que aumenta la diversidad de especies de mamíferos en un área determinada, es probable que la prevalencia de ciertas enfermedades disminuya. 
+                      Esto podría deberse a una menor interacción entre especies hospederas y patógenos, reduciendo así las oportunidades de transmisión. 
+                      Sin embargo, reconocemos que esta asociación podría variar según el tipo de enfermedad y otros factores ambientales y ecológicos."),
+              br(),
+            radioGroupButtons(size = "lg", justified = TRUE,
+                              inputId = "Pruebas1", label = tags$h4(tags$b("1. Mi hipotesis es acerca de:")), 
+                              choices = list("Diferencias" = 1, "Asociaciones" = 2),
+                              selected = 0,status = "primary"),
+            br(),
+            conditionalPanel("input.Pruebas1 == 1",
+                             tags$h4("Cualitativa: Clasificar las áreas en: `afectadas por enfermedades` o `libres de enfermedades`, 
+                                     podemos analizar si existe una diferencia significativa en la prevalencia de la enfermedad entre un área con alta diversidad 
+                                     de especies y el área con baja diversidad."),
+                             tags$h4("Cuantitativa: Al medir los casos de enfermedades por unidad de área o por número de individuos en la población, podemos 
+                                     medir la magnitud de la diferencia en la prevalencia de enfermedades entre las áreas con alta y baja diversidad."),
+                             radioGroupButtons(size = "lg", justified = TRUE,
+                                               inputId = "PruebasDif1", label = tags$h4(tags$b("2. Mi variable dependiente es:")), 
+                                               choices = list("Cuantitativa" = 1, "Cualitativa" = 2),
+                                               selected = 0,status = "primary")
+                             )
             )
+            
             )
     )
+)
 
 
 # Run the UI

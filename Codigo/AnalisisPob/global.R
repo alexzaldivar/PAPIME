@@ -8,6 +8,7 @@ library(plotly)
 library(mathjaxr)
 library(mc2d)
 library(ggplot2)
+library(mathjaxr)
 
 mosquitos <- read.csv('www/Base_mosquitos.csv')
 
