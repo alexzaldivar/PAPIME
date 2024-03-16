@@ -326,31 +326,103 @@ body <- dashboardBody(
               br(),
             fluidRow(
               column(width = 5, 
-            radioGroupButtons(inputId = "Pruebas1", label = tags$h4(tags$b("1. Mi hipotesis es acerca de:")), justified = TRUE,
+            radioGroupButtons(inputId = "P", label = tags$h4(tags$b("1. Mi hipotesis es acerca de:")), justified = TRUE,
                               choices = list("Diferencias" = 1, "Asociaciones" = 2),
                               selected = 0,status = "primary"),
             br(),
-            conditionalPanel("input.Pruebas1 == 1",
-                             radioGroupButtons(inputId = "PruebasDif1", label = tags$h4(tags$b("2. Mi variable dependiente es:")), 
+            conditionalPanel("input.P == 1",
+                             radioGroupButtons(inputId = "PDif", label = tags$h4(tags$b("2. Mi variable dependiente es:")), 
                                                justified =  TRUE, choices = list("Cuantitativa" = 1, "Cualitativa" = 2),
                                                selected = 0,status = "primary"),
                              helpText("Nota: La prevalencia de la enfermedad en cada área sería un ejemplo de una variable cuantitativa, mientras que
                                       el tipo de hábitat, como bosque denso versus pradera abierta, representaría una variable cualitativa.")),
-            conditionalPanel("input.Pruebas1 == 2",
-                             radioGroupButtons(inputId = "PruebasAso1", label = tags$h4(tags$b("2. Mi hipótesis de asociación es:")), 
+            conditionalPanel("input.P == 2",
+                             radioGroupButtons(inputId = "PAso", label = tags$h4(tags$b("2. Mi hipótesis de asociación es:")), 
                                                justified =  TRUE, choices = list("Simétrica" = 1, "Asimétrica" = 2),
                                                selected = 0,status = "primary"),
                              helpText("Nota: Una hipótesis simétrica implica que no hay diferencia entre dos grupos en estudio, por ejemplo, 
                                       se espera que la prevalencia sea la misma en ambos grupos de hábitat. Por otro lado, una hipótesis 
                                       asimétrica sugerirían que si existen diferencias de prevalencia entre los grupos de hábitat")),
-            conditionalPanel("input.PruebasDif1 == 1 & input.Pruebas1 == 1",
-                             radioGroupButtons(inputId = "PruebasDifQ", label = tags$h4(tags$b("2. Mi hipótesis es acerca de diferencias de:")), 
-                                               justified =  TRUE, choices = list("Media/tendencia central" = 1, 
-                                                                                 "Varianza/dispersión" = 2,"tipo de distribución" = 3),
-                                               selected = 0,status = "primary")
-                               
-                               
-                             )
+            conditionalPanel("input.PDif == 1 & input.P == 1",
+                             radioGroupButtons(inputId = "PDQuant", label = tags$h4(tags$b("3. Mi hipótesis es acerca de encontrar diferencias en:")), 
+                                               justified =  TRUE, choices = list("Media" = 1, "Varianza/dispersión" = 2,"Tipo de distribución" = 3),
+                                               selected = 0,status = "primary"),
+                             helpText("Nota: Las diferencias de media implica analizar si hay cambios promedio entre grupos. Las diferencias de 
+                                      varianza indican cuánto los datos de los grupos se dispersan alrededor de su media, revelando la 
+                                      consistencia de los resultados. Tambien podemos saber si los datos siguen un patrón predecible, como el de una 
+                                      distribución de probabilidad como la normal.")),
+            conditionalPanel("input.PDif == 2 & input.P == 1",
+                             radioGroupButtons(inputId = "PDQual", label = tags$h4(tags$b("3. ¿Cuántas muestras tengo?:")), 
+                                               justified =  TRUE, choices = list("Una muestra" = 1, "Dos muestras" = 2,
+                                                                                 "Más de dos muestras" = 3),
+                                               selected = 0,status = "primary"),
+                             helpText("Nota: El número de muestras en pruebas de hipótesis determina cuántos grupos se están comparando y 
+                                      cómo se realiza la evaluación de las diferencias entre ellos.")),
+            conditionalPanel("input.P == 2 & input.PAso == 1" ,
+                             radioGroupButtons(inputId = "PASim", label = tags$h4(tags$b("3. Mis variables son:")), 
+                                               justified =  TRUE, choices = list("Ambas cuantitativas" = 1, "1 cuanti & 1cuali" = 2,
+                                                                                 "Ambas cualitativas" = 3),
+                                               selected = 0,status = "primary"),
+                             helpText("Nota: En hipótesis simétricas, la prueba de hipótesis se centra en detectar cualquier tipo de diferencia 
+                                      significativa entre los grupos o condiciones comparados, sin prever la dirección específica del efecto")),
+            conditionalPanel("input.P == 2 & input.PAso == 2" ,
+                             radioGroupButtons(inputId = "PAAsim", label = tags$h4(tags$b("3. Mis variable dependiente es:")), 
+                                               justified =  TRUE, choices = list("Cuantitativa" = 1, "Cualitativa" = 2),
+                                               selected = 0,status = "primary"),
+                             helpText("Nota: En las hipótesis asimétricas, se anticipa un efecto en una dirección definida, 
+                                      donde la variable dependiente es la que se prevé que sea influenciada por otra. Por ejemplo, 
+                                      a medida que aumenta la diversidad, la prevalencia disminuye de manera cuantitativa. Por otro lado, 
+                                      se  espera que la diversidad de especies influya en la presencia o ausencia de ciertas enfermedades, 
+                                      sin predicciones específicas sobre la magnitud del efecto.")),
+            conditionalPanel("input.P == 1 & input.PDif == 1 & input.PDQuant > 0",
+                             radioGroupButtons(inputId = "PDQSample", label = tags$h4(tags$b("4. ¿Cuántas muestras tengo?:")), 
+                                               justified =  TRUE, choices = list("Una muestra" = 1, "Dos muestras" = 2,"Más de dos muestras" = 3),
+                                               selected = 0,status = "primary"),
+                             helpText("Nota: El número de muestras en pruebas de hipótesis determina cuántos grupos se están comparando y 
+                                      cómo se realiza la evaluación de las diferencias entre ellos")),
+            conditionalPanel("input.PDif == 2 & input.P == 1 & input.PDQual == 1",
+                             radioGroupButtons(inputId = "PDQ1sample", label = tags$h4(tags$b("4. Mis variables tiene:")), 
+                                               justified =  TRUE, choices = list("2 categorias" = 1, ">= 3 categorias" = 2),
+                                               selected = 0,status = "primary"),
+                             helpText("Nota: Tener dos categorías implica la comparación entre dos grupos distintos, como por ejemplo la exposición 
+                                      versus no exposición a un patógeno. Por otro lado, al tener más de dos categorías, se compara 
+                                      entre múltiples grupos o condiciones, como por ejemplo los diferentes tipos de hábitat.")),
+            conditionalPanel("input.PDif == 2 & input.P == 1 & input.PDQual == 2 | input.PDQual == 3",
+                             radioGroupButtons(inputId = "PDQ2sample", label = tags$h4(tags$b("4. Mis muestras son estadísticamente:")), 
+                                               justified =  TRUE, choices = list("Independientes" = 1, "Dependientes" = 2),
+                                               selected = 0,status = "primary"),
+                             helpText("Nota: Tener muestras estadísticamente independientes implica que los datos recopilados 
+                                      de diferentes grupos o condiciones no están relacionados entre sí. Por ejemplo, al 
+                                      comparar la diversidad de especies en diferentes hábitats, cada hábitat se considera 
+                                      una muestra independiente. Por el otro lado, en las muestras dependientes podría significar 
+                                      recopilar datos de los mismos hábitats en diferentes momentos o antes y después de la 
+                                      introducción de ciertas intervenciones. Esto permite evaluar cómo cambia la prevalencia 
+                                      de enfermedades en un hábitat específico en respuesta a cambios internos o externos.")),
+            conditionalPanel("input.P == 2 & input.PAso == 1 & input.PASim == 1" ,
+                             radioGroupButtons(inputId = "PASQuant", label = tags$h4(tags$b("4. Se asume una asociación:")), 
+                                               justified =  TRUE, choices = list("Lineal" = 1, "Monotónica" = 2,"No monotónica" = 3),
+                                               selected = 0,status = "primary"),
+                             helpText("Nota: Pendiente")),
+            conditionalPanel("input.P == 2 & input.PAso == 1 & input.PASim == 2" ,
+                             radioGroupButtons(inputId = "PASQQ", label = tags$h4(tags$b("4. La variable cualitativa tiene:")), 
+                                               justified =  TRUE, choices = list("2 categorias" = 1, ">= 3 categorias" = 2),
+                                               selected = 0,status = "primary"),
+                             helpText("Nota: pendiente")),
+            conditionalPanel("input.P == 2 & input.PAso == 1 & input.PASim == 3" ,
+                             radioGroupButtons(inputId = "PASQual", label = tags$h4(tags$b("4. Ambas variables tienen solo dos categorias:")), 
+                                               justified =  TRUE, choices = list("Si" = 1, "No" = 2),
+                                               selected = 0,status = "primary"),
+                             helpText("Nota: Falta"))
+            # conditionalPanel("input.P == 2 & input.PAso == 2" ,
+            #                  radioGroupButtons(inputId = "PAAsim", label = tags$h4(tags$b("3. Mis variable dependiente es:")), 
+            #                                    justified =  TRUE, choices = list("Cuantitativa" = 1, "Cualitativa" = 2),
+            #                                    selected = 0,status = "primary"),
+            #                  helpText("Nota: En las hipótesis asimétricas, se anticipa un efecto en una dirección definida, 
+            #                           donde la variable dependiente es la que se prevé que sea influenciada por otra. Por ejemplo, 
+            #                           a medida que aumenta la diversidad, la prevalencia disminuye de manera cuantitativa. Por otro lado, 
+            #                           se  espera que la diversidad de especies influya en la presencia o ausencia de ciertas enfermedades, 
+            #                           sin predicciones específicas sobre la magnitud del efecto."))
+            
             )
             )
             )
