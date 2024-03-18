@@ -227,5 +227,34 @@ function(input, output){
   })
   
   
+  observeEvent(input$runSim, {
+    ns <- seq(input$sampleSizeRange[1], input$sampleSizeRange[2], by = 25)
+    mdiffs <- seq(input$meanDiffRange[1], input$meanDiffRange[2], by = 0.05)
+    iters <- input$iterations
+    
+    # Preparar un dataframe vacío para almacenar los resultados
+    results_df <- data.frame(n = integer(), mdiff = numeric(), test = character(), power = numeric())
+    
+    for (n in ns) {
+      for (mdiff in mdiffs) {
+        sim_result <- t_wmw_pwr_sim_exp(n_per_grp = n, mdiff = mdiff, iters = iters)
+        # Asegurarse de que los nombres de las columnas sean consistentes
+        results_df <- rbind(results_df, data.frame(n = n, mdiff = mdiff, test = "t-test", power = sim_result['t_pwr']))
+        results_df <- rbind(results_df, data.frame(n = n, mdiff = mdiff, test = "Wilcoxon", power = sim_result['wmw_pwr']))
+      }
+    }
+    
+    output$powerPlot <- renderPlot({
+      results_df %>%
+        ggplot(aes(x = mdiff, y = power, color = test)) +
+        geom_line() +
+        facet_wrap(~n, scales = "free_x") +
+        labs(title = "Comparación de Potencia: Prueba t vs. Wilcoxon",
+             x = "Diferencia de medias", y = "Potencia") +
+        scale_color_manual(values = c("t-test" = "salmon", "Wilcoxon" = "cornflowerblue")) +
+        theme_minimal()
+    })
+  })
+  
 } %>% 
   shinyServer()

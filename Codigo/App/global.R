@@ -66,3 +66,28 @@ especies_aves$Cantidad[especies_aves$Categoria == "Migratoria" & format(especies
 especies_aves$Cantidad2 <- ifelse(especies_aves$AreaProtegida == "Area1", especies_aves$Cantidad2 * runif(1, 1.5, 2),
                                   ifelse(especies_aves$AreaProtegida == "Area2", especies_aves$Cantidad2 * runif(1, 0.5, 1),
                                          especies_aves$Cantidad2 * runif(1, 2, 3)))
+
+
+usageInstructions <- div(
+  tags$h3("Instrucciones de Uso:"),
+  tags$ul(
+    tags$li("Ajuste el 'Rango de tamaño de muestra por grupo' para definir los tamaños de muestra con los que desea trabajar."),
+    tags$li("Modifique el 'Rango de diferencia de medias' para establecer el rango de diferencias medias entre los grupos a explorar."),
+    tags$li("Especifique el 'Número de iteraciones' para controlar la precisión de las simulaciones. Un número mayor de iteraciones puede ofrecer resultados más precisos pero requerirá más tiempo de procesamiento."),
+    tags$li("Haga clic en 'Ejecutar Simulación' para iniciar la simulación con los parámetros especificados. Los resultados se visualizarán en el gráfico debajo, mostrando la potencia de las pruebas t de Student y de Wilcoxon en función de las diferencias medias seleccionadas y los tamaños de muestra.")
+  )
+)
+
+# Definimos la función para realizar las simulaciones de potencia
+t_wmw_pwr_sim_exp <- function(n_per_grp = 100, rate = 1, mdiff = .25, iters = 5000) {
+  res <- replicate(iters, {
+    y_a <- rexp(n_per_grp, rate)
+    y_b <- rexp(n_per_grp, rate) + mdiff
+    t_res <- t.test(y_a, y_b, var.equal = TRUE)
+    wmw_res <- wilcox.test(y_a, y_b)
+    list(t_pwr = t_res$p.value, wmw_pwr = wmw_res$p.value)
+  }, simplify = FALSE)
+  
+  c(t_pwr = mean(sapply(res, function(x) x$t_pwr < 0.05)),
+    wmw_pwr = mean(sapply(res, function(x) x$wmw_pwr < 0.05)))
+}
