@@ -7,8 +7,8 @@ sidebar <- dashboardSidebar(width = 300,
                                         menuItem("Presentación", tabName = "presentacion", icon = icon ("circle-info")),
                                         menuItem("Análisis de población", tabName = "Sub4_1", icon = icon("feather-pointed"),
                                                  menuSubItem("Estructura de la población", tabName = "Sub4_1_1"),
-                                                 menuSubItem("Tamaño de muestra", tabName = "Sub4_1_2")),
-                                        menuItem("Análisis de comunidades", tabName = "Sub4_2", icon = icon("circle-nodes")),
+                                                 menuSubItem("Tamaño de muestra", tabName = "Sub4_1_2"),
+                                                 menuSubItem("Análisis de comunidades", tabName = "Sub4_2")),
                                         menuItem("Selección de herramientas estadísticas", tabName = "Sub4_3", icon = icon("chart-pie"),
                                                  menuSubItem("Gráficos", tabName = "Sub4_3_1"),
                                                  menuSubItem("Pruebas paramétricas y no paramétricas", tabName = "Sub4_3_2"))
@@ -58,20 +58,30 @@ body <- dashboardBody(
     # Analisis de poblaciones: 
     # Proporción de sexo, proporción de edades, densidad poblacional, tamaño mínimo de muestra, prevalencias ponderadas, esfuerzo de muestreo
     tabItem(tabName = "Sub4_1_1",
+            wellPanel(
+              tags$h3(tags$b("Análisis de población en el contexto de la ecología de enfermedades y la medicina de conservación"), align ="center"),
+              tags$h4("La caracterización de la estructura demográfica de una población animal es esencial para comprender 
+                      la dinámica de enfermedades y la propagación de patógenos. La distribución por edades y sexos proporciona 
+                      información valiosa sobre la vulnerabilidad diferencial a ciertas enfermedades y permite identificar grupos 
+                      de riesgo específicos, facilitando así el diseño de estrategias preventivas y de control más efectivas."),
+              tags$h4("Instrucciones: Utilizando la base de datos proporcionada, selecciona una muestra representativa de los 
+                      datos de muestreo de mosquitos."),
+              tags$h4("Observa las características poblacionales por sitio de muestreo, trampa utilizada, género y especie de mosquito.")),
             fluidRow(
               ### Seleccion de la variable -----------
               box(
-                title = "Seleccion de variable",
+                title = "Observa las características poblacionales por sitio de muestreo, trampa utilizada, género y especie de mosquito",
                 width = 12,
                 shiny::selectInput(inputId = 'var', label = 'Variable', choices = colnames(mosquitos)),
                 'Esto es texto'
               ),
               ### Figuras del grid ----------
-              box(plotlyOutput('Bar')),
-              box(plotlyOutput('Grid')),
+              box(plotOutput('Bar')),
+              box(plotOutput('Grid')),
               box(
                 width = 12,
                 ### Seleccion de tamaño de muestra -----------
+                checkboxInput(inputId = "Sample_effect", label = "Seleccionar un tamaño de muestra"),
                 shiny::sliderInput(inputId = 'sample_size', label = 'Tamaño de muestra', min = 0, max = 722, value = 100) 
               )
             )
@@ -122,9 +132,23 @@ body <- dashboardBody(
     ## Unidad 2 -----------------
     # Analisis de comunidades:
     # Riqueza, curvas de acumulación de riqueza, rarefacción de riqueza, diversidad alfa, diversidad beta
-    tabItem(
-      tabName = 'unidad2'
-    ),
+    tabItem(tabName = 'Sub4_2',
+            wellPanel(
+              tags$h3(tags$b("Exploración de la composición de mosquitos a través de sitios utilizando índices de diversidad beta."), align ="center"),
+              tags$h4("Esta aplicación permite explorar la diversidad beta de mosquitos entre diferentes sitios. La diversidad beta 
+                      se refiere a la variación en la composición de especies entre ecosistemas o comunidades."),
+              tags$h4("Al hacer clic en 'Analizar Diversidad', la aplicación calcula y muestra:"),
+              tags$h4("Un dendrograma basado en el índice de Jaccard, reflejando la similitud entre sitios."),
+              tags$h4("Un dendrograma de recambio de especies, mostrando cómo las especies varían entre sitios."),
+              tags$h4("Resultados de la diversidad beta, incluyendo recambio y anidamiento."),
+              actionButton("btn_analizar", "Analizar Diversidad"),
+              verbatimTextOutput("resultados_diversidad")),
+            fluidRow(
+              column(width = 6,
+                     plotOutput("plot_dendrograma_jaccard")),
+              column(width = 6,
+              plotOutput("plot_dendrograma_recambio")))
+            ),
     ## Unidad 3 -----------------
     tabItem(
       tabName = 'unidad3',

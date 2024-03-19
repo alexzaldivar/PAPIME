@@ -3,9 +3,14 @@ function(input, output){
   
 
   ###### Subunidad 4.1. Analisis de poblacion  ------
-  output$Bar <- renderPlotly({
+  output$Bar <- renderPlot({
+    
+    if (input$Sample_effect == TRUE) {
+      
     # Grafico con intervalos
-    p <- mosquitos %>% 
+    s <- mosquitos[sample(1:nrow(mosquitos), input$sample_size),]
+    
+    p <- s %>% 
       count(!!sym(input$var)) %>% 
       mutate(N = sum(n)) %>% 
       rowwise() %>% 
@@ -18,16 +23,51 @@ function(input, output){
       labs(title = paste0('Proporción de mosquitos por ', input$var), x = input$var, y = 'Proporción') +
       th
     
-    ggplotly(p)
+    p
+    } else {
+      
+      p <- mosquitos %>% 
+        count(!!sym(input$var)) %>% 
+        mutate(N = sum(n)) %>% 
+        rowwise() %>% 
+        mutate(tst = list(broom::tidy(prop.test(n, N, conf.level=0.95)))) %>%
+        tidyr::unnest(tst) %>% 
+        mutate(p = n/sum(n)) %>% 
+        ggplot(aes(x = !!sym(input$var))) +
+        geom_bar(aes(y = p, fill = !!sym(input$var)), stat = 'identity') +
+        geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.5) +
+        labs(title = paste0('Proporción de mosquitos por ', input$var), x = input$var, y = 'Proporción') +
+        th
+      
+      p
+      
+    }
+    #ggplotly(p)
   })
   
-  output$Grid <- renderPlotly({
-    p <- mosquitos %>%
+  output$Grid <- renderPlot({
+    
+    if (input$Sample_effect == TRUE) {
+    s <- mosquitos[sample(1:nrow(mosquitos), input$sample_size),]
+    
+    p <- s %>%
       ggplot() +
       geom_tile(aes(x = x, y = y, fill = !!sym(input$var)), col = 'black') +
       theme_void()
 
-    ggplotly(p)
+    p
+    
+    } else {
+      
+      p <- mosquitos %>%
+        ggplot() +
+        geom_tile(aes(x = x, y = y, fill = !!sym(input$var)), col = 'black') +
+        theme_void()
+      
+      p
+      
+    }
+    #ggplotly(p)
   })
   
   ###### Subunidad 4.1. Tamaño mínimo de muestra ------
@@ -95,6 +135,42 @@ function(input, output){
     
   })
   
+  ###### Subunidad 4.2 ------- Diversidad
+  
+  observeEvent(input$btn_analizar, {
+    
+
+    
+    # Preparación de datos
+    mosquitos$N <- rep(1, nrow(mosquitos))
+    com <- makecommunitydataset(mosquitos, row = "SITIO", column = "NOMBRE", value = "N", drop = TRUE)
+    com[com > 1] <- 1
+    
+    # Diversidad Beta - Índice de Jaccard
+    j <- betadiver(com, method = "j")
+    
+    output$plot_dendrograma_jaccard <- renderPlot({
+      plot(hclust(1 - j), hang = -1, main = "Dendrograma - Índice de Jaccard")
+    })
+    
+    # Diversidad Beta - Análisis de Componentes
+    bm <- beta.multi(com, index.family = "sorensen")
+    
+    output$resultados_diversidad <- renderPrint({
+      list(
+        beta_total = bm$beta.SOR,
+        recambio = bm$beta.SIM,
+        anidamiento = bm$beta.SNE
+      )
+    })
+    
+    # Diversidad Beta - Recambio
+    bp <- beta.pair(com, index.family = "sorensen")
+    
+    output$plot_dendrograma_recambio <- renderPlot({
+      plot(hclust(bp$beta.sim), hang = -1, main = "Dendrograma - Recambio de Especies")
+    })
+  })
   
   
   ## Subunidad 4.3 --------------

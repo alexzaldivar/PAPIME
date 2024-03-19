@@ -9,6 +9,9 @@ library(mathjaxr)
 library(mc2d)
 library(ggplot2)
 library(mathjaxr)
+library(vegan)
+library(betapart)
+library(BiodiversityR)
 
 mosquitos <- read.csv('data/Base_mosquitos.csv')
 
